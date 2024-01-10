@@ -13,6 +13,8 @@ using System.Timers;
 using Android.Views.Animations;
 using Android.Util;
 using System.Drawing;
+using Android.Graphics;
+
 namespace Chaser
 {
     [Activity(Label = "chaserGameActivity")]
@@ -32,10 +34,7 @@ namespace Chaser
 
         TextView question;
 
-        AnswerButton[] answersButtons;
-        
-          
-
+        AnswerButton[] answersButtons;        
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -214,14 +213,22 @@ namespace Chaser
                     // The clicked button is marked as true
                     Toast.MakeText(this, "Correct!", ToastLength.Short).Show();
                     MoveAnimation(playerLogo);
-                    if (gameHandler.answeredCorrectly())
+                    switch (gameHandler.answeredCorrectly())
                     {
-                        //restart game - השחקן ניצח
-                    }
-                    //סתם
-                    else
-                    {
-                        UpdateScreen();
+                        case 1:
+                            MoveAnimation(chaserLogo);
+                            EndOfGame(true);
+                            break;
+                        case 2:
+                            EndOfGame(true);
+                            break;
+                        case 3:
+                            MoveAnimation(chaserLogo);
+                            UpdateScreen();
+                            break;
+                        case 4:
+                            UpdateScreen();
+                            break;
                     }
                 }
                 else
@@ -233,6 +240,7 @@ namespace Chaser
                         case 1:
                             MoveAnimation(chaserLogo);
                             //הודעה כי הצ'ייסר ניצח
+                            EndOfGame(false);
                             break;
                         case 2:
                             MoveAnimation(chaserLogo);
@@ -240,6 +248,7 @@ namespace Chaser
                             //
                             break;
                         case 3:
+                            //שני השחקנים טעו
                             UpdateScreen();
                             break;
                     }
@@ -272,6 +281,56 @@ namespace Chaser
 
             // Start the timer again
             countDownTimer.Start();
+        }
+        private void ShowVictoryDialog(bool playerWon)
+        {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            LayoutInflater inflater = LayoutInflater.From(this);
+            View dialogView = inflater.Inflate(Resource.Layout.victoryDialog, null, false);
+            TextView titleView = dialogView.FindViewById<TextView>(Resource.Id.dialog_title);
+            TextView messageView = dialogView.FindViewById<TextView>(Resource.Id.dialog_message);
+
+
+            if (playerWon)
+            {
+                titleView.Text = "Victory";
+                messageView.Text = "Congratulations! You have won!";
+            }
+            else
+            {
+                titleView.Text = "Chaser Won";
+                messageView.Text = "Better luck next time! The chaser has won!";
+            }
+
+            builder.SetView(dialogView);
+
+            // Set click handlers for buttons
+            builder.SetPositiveButton("Another Game", (sender, args) =>
+            {
+                // Handle the "Another Game" button click
+                // You can implement the logic to start a new game
+                Intent chaserGameIntent = new Intent(this, typeof(ChaserSettingsActivity));
+                StartActivity(chaserGameIntent);
+            });
+
+            builder.SetNegativeButton("Return Home", (sender, args) =>
+            {
+                // Handle the "Return Home" button click
+                // You can implement the logic to return to the home screen
+                Intent mainActivityIntent = new Intent(this, typeof(MainActivity));
+                StartActivity(mainActivityIntent);
+            });
+
+            AlertDialog dialog = builder.Create();
+            dialog.Show();
+
+        }
+
+        private void EndOfGame(bool playerWon)
+        {
+            countDownTimer.Stop();
+            gameHandler.RestartGame();
+            ShowVictoryDialog(playerWon);
         }
     }
 }

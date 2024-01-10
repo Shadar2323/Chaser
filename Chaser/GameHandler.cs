@@ -31,7 +31,7 @@ namespace Chaser
             //need to add the static database of the questions
             string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
             databaseHelper = new DatabaseHelper(dbPath);
-
+            chaserPlacement = 7;
             
             random = new Random();
             settings = Settings.Instance;
@@ -43,7 +43,7 @@ namespace Chaser
             if (diff == "hard")
             {
                 //מחזיר אוסף שאלות קשות
-                playerPlacement = 4;
+                playerPlacement = 6;
                 moveAnimation = 90;
             }
             if (diff == "medium")
@@ -56,7 +56,7 @@ namespace Chaser
             {
                 //מחזיר אוסף שאלות קלות
                 moveAnimation = 115;
-                playerPlacement = 6;
+                playerPlacement = 4;
             }
         }
 
@@ -78,6 +78,8 @@ namespace Chaser
             if (usedQuestions.Count == questionList.Count)
             {
                 usedQuestions.Clear();
+                QAndA qAndA1 = new QAndA("Out of questions", new Answer("Red", false), new Answer("Blue", true), new Answer("Green", false), new Answer("Yellow", false), "easy");
+                return qAndA1;
             }
 
             // Get a random index from the available questions
@@ -103,16 +105,28 @@ namespace Chaser
         {
             return databaseHelper.GetQuestionsByDifficulty(diff);
         }
-        public bool answeredCorrectly()
+        public int answeredCorrectly()
         {
             playerPlacement--;
-            return playerPlacement == 0;
+            bool chaserCorrect = chaserResault();
+            if (playerPlacement==0)
+            {
+                if (chaserCorrect) //השחקן ניצח והצייסר צדק
+                {
+                    return 1;
+                }
+                return 2;// השחקן רק ניצח הצייסר טעה
+            }
+            else if (chaserCorrect) { chaserPlacement--; return 3; }
+            return 4;//השחקן רק ענה נכון
         }
         public int answeredInCorrectly()
         {
-            if (chaserResault())
+            bool chaserCorrect = chaserResault();
+            
+            if (chaserCorrect)
             {
-                chaserPlacement--;
+                chaserPlacement -= 1;
                 if (chaserPlacement==playerPlacement)
                 {
                     return 1;//הצ'ייסר ניצח
@@ -143,7 +157,7 @@ namespace Chaser
             Random random = new Random();
             int randomNumber = random.Next(0, 100); // Generate a random number between 0 and 99
 
-            return randomNumber < botCorrectnessProbability;
+            return randomNumber > botCorrectnessProbability;
         }
     }
 }

@@ -23,11 +23,11 @@ namespace Chaser
         public DatabaseHelper(string dbPath)
         {
             database = new SQLiteConnection(dbPath);
-            if (database.GetTableInfo(tableName) ==null)
+            if (!TableExists())
             {
                 database.CreateTable<QAndA>();
                 InitializeDatabase();
-            }                        
+            }
         }
 
         void InitializeDatabase()
@@ -63,6 +63,11 @@ namespace Chaser
                 qAndA.answers = JsonConvert.DeserializeObject<Answer[]>(qAndA.SerializedAnswers);
             }
             return questions;
+        }
+        public bool TableExists()
+        {
+            var tableInfo = database.GetTableInfo(tableName);
+            return tableInfo.Count > 0;
         }
     }
 }
