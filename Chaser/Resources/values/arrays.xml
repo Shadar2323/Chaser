@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<!-- Difficulty Options -->
+	<string-array name="difficulty_options">
+		<item>קל</item>
+		<item>בינוני</item>
+		<item>קשה</item>
+	</string-array>
+
+	<!-- Time Options -->
+	<string-array name="time_options">
+		<item>15</item>
+		<item>20</item>
+		<item>25</item>
+	</string-array>
+</resources>

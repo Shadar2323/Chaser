@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minWidth="25px"
+    android:minHeight="25px"
+    >
+    <ImageView
+        android:contentDescription=""
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:src="@drawable/image"
+        android:id="@+id/imageView1"/>
+    <ImageButton
+        android:contentDescription=""
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:src="@drawable/iconP"
+        android:backgroundTint="@android:color/white"
+        />
+        
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+    <Button
+        android:id="@+id/chaserButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="המרדף"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@android:color/black"
+        android:onClick="startGameButtonClick"/>
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"     
+        android:text="חידון מהיר"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@android:color/black"/>
+
+    <View
+        android:layout_width="16dp"
+        android:layout_height="1dp" />
+
+    <Button
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="תרגול שאלות"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="@android:color/black"/>
+    </LinearLayout>
+
+</RelativeLayout>
+

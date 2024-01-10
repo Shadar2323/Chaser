@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="בחר רמת קושי"
+        android:textSize="18sp"
+        android:textDirection="rtl"
+        android:layout_weight="1"/>
+
+    <Spinner
+        android:id="@+id/difficultySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/difficulty_options"
+        android:layout_weight="1" />
+
+    <!-- Time Spinner -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="בחר זמן לשאלה"
+        android:textSize="18sp"
+        android:layout_marginTop="16dp" 
+        android:textDirection="rtl"
+        android:layout_weight="1"/>
+
+    <Spinner
+        android:id="@+id/timeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:entries="@array/time_options"
+        android:textDirection="rtl"
+        android:layout_weight="1"/>
+
+    <!-- Start Game Button -->
+    <Button
+        android:id="@+id/startGameButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:text="התחל משחק"
+        android:onClick="startGame"
+        android:textDirection="rtl"
+        android:textColor="#ffffff"
+        android:textSize="18sp"
+        android:background="@drawable/roundedbutton"
+        android:layout_weight="1"/>
+</LinearLayout>

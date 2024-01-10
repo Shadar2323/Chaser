@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Chaser.ChaserGameActivity">
+    <Position X="6" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAQAAAAEAAAAAAAAAABAGCJIAgAAwAAgAABAIQA=</HashCode>
+      <FileName>ChaserGameActivity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="b1" />
+      <Field Name="QAndA" />
+      <Field Name="gameHandler" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Chaser.Answer">
+    <Position X="11" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAACAAAAAgAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Answer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chaser.AnswerButton">
+    <Position X="7.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AnswerButton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chaser.ChaserSettingsActivity">
+    <Position X="5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAECAAAAAAAAAAQCAAAAAAACKAAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>ChaserSettingsActivity.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="settings" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Chaser.GameHandler">
+    <Position X="2" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAQAAABAAAAAAAAACAAAAABAQAAAAAgAA=</HashCode>
+      <FileName>GameHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="settings" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Chaser.MainActivity">
+    <Position X="11" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAIAAAAAAAACAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>MainActivity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Chaser.QAndA">
+    <Position X="8.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAwCEAAAAAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>QAndA.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="answer1" />
+      <Property Name="answer3" />
+      <Property Name="answer2" />
+      <Property Name="answer4" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Chaser.Settings">
+    <Position X="2" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAABAAAAAQAAAAAgAAAA=</HashCode>
+      <FileName>Settings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Android.Widget.Button" Collapsed="true">
+    <Position X="7.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
