@@ -20,12 +20,11 @@ namespace Chaser
         private List<QAndA> usedQuestions;
         private Random random;
         string diff;
-        Settings settings;
+        private Settings settings;
         int moveAnimation;
         int playerPlacement;
         int chaserPlacement;
         int botCorrectnessProbability;
-        public int trueAnswer { get; set; }
         public GameHandler()
         {
             //need to add the static database of the questions

@@ -57,6 +57,7 @@
         android:layout_weight="1"     
         android:text="חידון מהיר"
         android:textColor="#FFFFFF"
+        android:id="@+id/fastQuizButton"
         android:backgroundTint="@android:color/black"/>
 
     <View

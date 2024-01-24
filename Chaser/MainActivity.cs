@@ -11,6 +11,7 @@ namespace Chaser
     public class MainActivity : AppCompatActivity
     {
         Button chaserButton;
+        Button fastQuiz;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -18,10 +19,16 @@ namespace Chaser
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.activity_main);
 
+            fastQuiz = FindViewById<Button>(Resource.Id.fastQuizButton);
+            fastQuiz.Click += OpenQuizClick;
             chaserButton = FindViewById<Button>(Resource.Id.chaserButton);
             chaserButton.Click += OpenSettingsClick;
         }
-
+        private void OpenQuizClick(object sender, EventArgs e)
+        {
+            Intent fastQuizIntent = new Intent(this, typeof(FastQuizActivity));
+            StartActivity(fastQuizIntent);
+        }
         private void OpenSettingsClick(object sender, EventArgs e)
         {
             //start the SettingsActivity
