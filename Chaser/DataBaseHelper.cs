@@ -29,7 +29,6 @@ namespace Chaser
                 InitializeDatabase();
             }
         }
-
         void InitializeDatabase()
         {
             QAndA qAndA1 = new QAndA("What is your favorite color?", new Answer("Red", false), new Answer("Blue", true), new Answer("Green", false), new Answer("Yellow", false), "easy");
@@ -42,6 +41,15 @@ namespace Chaser
             SaveQAnda(qAndA3);
             SaveQAnda(qAndA4);
             SaveQAnda(qAndA5);
+        }
+        public List<QAndA> GetQuestions()
+        {
+            var questions = database.Table<QAndA>().ToList();
+            foreach (var qAndA in questions)
+            {
+                qAndA.answers = JsonConvert.DeserializeObject<Answer[]>(qAndA.SerializedAnswers);
+            }
+            return questions;
         }
         public int SaveQAnda(QAndA q)
         {

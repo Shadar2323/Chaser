@@ -69,9 +69,11 @@
     <Compile Include="GameHandler.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="QAndA.cs" />
+    <Compile Include="QuizHandler.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <Compile Include="TriviaHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
@@ -173,6 +175,11 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\fastQuizLayout.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\quizLayout.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

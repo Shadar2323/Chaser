@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Timer and Progress Bar -->
+    <RelativeLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/timerTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00:00"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp"/>
+
+        <ProgressBar
+            android:id="@+id/timeProgressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/timerTextView"
+            android:layout_marginTop="8dp"
+            android:max="100"
+            android:progress="100" />
+
+        <ImageView
+            android:id="@+id/iconP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/pauseicon"
+            android:layout_alignParentEnd="true"
+            />
+    </RelativeLayout>
+
+    <!-- Question Number and Question -->
+    <LinearLayout
+        android:id="@+id/questionLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/topLayout"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/questionNumberTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question 1"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:id="@+id/questionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="What is the capital of France?"
+            android:textSize="20sp"
+            android:layout_marginBottom="16dp"/>
+    </LinearLayout>
+
+    <!-- Grid Layout for Answer Buttons -->
+    <GridLayout
+        android:id="@+id/answerGridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/questionLayout"
+        android:rowCount="2"
+        android:columnCount="2"
+        android:padding="16dp">
+
+        <!-- Button 1 -->
+        <Button
+            android:id="@+id/answerButton1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Option 1"/>
+
+        <!-- Button 2 -->
+        <Button
+            android:id="@+id/answerButton2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Option 2"/>
+
+        <!-- Button 3 -->
+        <Button
+            android:id="@+id/answerButton3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Option 3"/>
+
+        <!-- Button 4 -->
+        <Button
+            android:id="@+id/answerButton4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="Option 4"/>
+    </GridLayout>
+
+    <!-- Answered Correctly Display -->
+    <RelativeLayout
+        android:id="@+id/answeredCorrectlyLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/answeredCorrectlyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Answered Correctly: 0"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -13,52 +13,47 @@ using System.IO;
 
 namespace Chaser
 {
-    public class GameHandler
+    public class GameHandler : TriviaHandler
     {
-        DatabaseHelper databaseHelper;
-        private List<QAndA> questionList;
-        private List<QAndA> usedQuestions;
-        private Random random;
-        string diff;
+        // Additional members specific to GameHandler
+        private int moveAnimation;
+        private int playerPlacement;
+        private int chaserPlacement;
+        private int botCorrectnessProbability;
+        private string diff;
         private Settings settings;
-        int moveAnimation;
-        int playerPlacement;
-        int chaserPlacement;
-        int botCorrectnessProbability;
-        public GameHandler()
+        public GameHandler() : base()
         {
-            //need to add the static database of the questions
-            string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
-            databaseHelper = new DatabaseHelper(dbPath);
             chaserPlacement = 7;
-            
-            random = new Random();
+            questionList = setQuestionsList();
             settings = Settings.Instance;
             diff = settings.Diff;
-            questionList = new List<QAndA>();
-            questionList = setQuestionsList();
-            usedQuestions = new List<QAndA>();
-            
+            // The base class constructor (TriviaHandler constructor) is called using "base()"
+            // No need to reinitialize members already initialized in TriviaHandler
+
             if (diff == "hard")
             {
-                //מחזיר אוסף שאלות קשות
+                // Additional initialization specific to GameHandler for "hard" difficulty
                 playerPlacement = 6;
                 moveAnimation = 90;
             }
             if (diff == "medium")
             {
-                //מחזיר אוסף שאלות בינוניות
+                // Additional initialization specific to GameHandler for "medium" difficulty
                 moveAnimation = 100;
                 playerPlacement = 5;
             }
             if (diff == "easy")
             {
-                //מחזיר אוסף שאלות קלות
+                // Additional initialization specific to GameHandler for "easy" difficulty
                 moveAnimation = 115;
                 playerPlacement = 4;
             }
         }
-
+        public List<QAndA> setQuestionsList()
+        {
+            return databaseHelper.GetQuestionsByDifficulty(diff);
+        }
         public int GetDuration()
         {
             return settings.Duration;
@@ -70,39 +65,6 @@ namespace Chaser
         public int GetMoveAnimation()
         {           
             return moveAnimation; 
-        }
-        public QAndA GetRandomQuestion()
-        {
-            // Check if all questions have been used, if so, reset the used questions list
-            if (usedQuestions.Count == questionList.Count)
-            {
-                usedQuestions.Clear();
-                QAndA qAndA1 = new QAndA("Out of questions", new Answer("Red", false), new Answer("Blue", true), new Answer("Green", false), new Answer("Yellow", false), "easy");
-                return qAndA1;
-            }
-
-            // Get a random index from the available questions
-            int randomIndex;
-            do
-            {
-                randomIndex = random.Next(questionList.Count);
-            } while (usedQuestions.Contains(questionList[randomIndex]));
-
-            // Mark the question as used
-            usedQuestions.Add(questionList[randomIndex]);
-
-            // Return the selected question
-            return questionList[randomIndex];
-        }
-
-        public void RestartGame()
-        {
-            usedQuestions.Clear();
-        }
-
-        public List<QAndA> setQuestionsList()
-        {
-            return databaseHelper.GetQuestionsByDifficulty(diff);
         }
         public int answeredCorrectly()
         {

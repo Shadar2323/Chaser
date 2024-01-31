@@ -1,9 +1,11 @@
-﻿using Android.App;
+﻿using Android.Animation;
+using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using Java.Util.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +22,15 @@ namespace Chaser
         private TextView tvCountdown;
         private ProgressBar timeProgressBar;
         private LinearLayout answersLayout;
+        private int totalTimeInSeconds = 120;
+        private ValueAnimator progressAnimator;
+        QuizHandler quizHandler;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.fastQuizLayout);
-
+            quizHandler = new QuizHandler();
             tvCountdown = FindViewById<TextView>(Resource.Id.timerTextView);
             secondsRemaining = 120;
             countDownTimer = new Timer();
@@ -36,6 +41,7 @@ namespace Chaser
 
             // Get the LinearLayout container for answer buttons
             answersLayout = FindViewById<LinearLayout>(Resource.Id.answersLayout);
+
 
             // Add AnswerButtons dynamically
             AddAnswerButton("Paris");
@@ -53,14 +59,22 @@ namespace Chaser
                 if (secondsRemaining >= 0)
                 {
                     UpdateCountdown(secondsRemaining);
-                    UpdateProgressBar();
+                    int progress = (int)(((float)secondsRemaining));
+                    AnimateProgressBar(progress);
                 }
                 else
                 {
-                    
                     // Handle countdown completion
+                    countDownTimer.Stop();
                 }
             });
+        }
+        private void AnimateProgressBar(int progress)
+        {
+            // Use ObjectAnimator for smooth progress animation
+            ObjectAnimator animation = ObjectAnimator.OfInt(timeProgressBar, "progress", timeProgressBar.Progress, progress);
+            animation.SetDuration(1000); // Animation duration in milliseconds
+            animation.Start();
         }
 
         private void UpdateCountdown(int seconds)
@@ -69,11 +83,6 @@ namespace Chaser
             string formattedTime = $"{(seconds / 60):D2}:{(seconds % 60):D2}";
             // Update the TextView with the remaining time
             tvCountdown.Text = formattedTime.ToString();
-        }
-        private void UpdateProgressBar()
-        {
-            int progress = (int)((float)(secondsRemaining / 120 * 100));
-            timeProgressBar.Progress = progress;
         }
         private void AddAnswerButton(string answerText)
         {
@@ -105,7 +114,5 @@ namespace Chaser
             // Add the AnswerButton to the LinearLayout
             answersLayout.AddView(answerButton);
         }
-
-
     }
 }
