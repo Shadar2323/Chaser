@@ -1,6 +1,7 @@
 ﻿using Android.Animation;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -25,7 +26,8 @@ namespace Chaser
         private int totalTimeInSeconds = 120;
         private ValueAnimator progressAnimator;
         QuizHandler quizHandler;
-
+        private GridLayout answerGridLayout;
+        private AnswerButton[] answerButtons;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -37,18 +39,13 @@ namespace Chaser
             countDownTimer.Interval = 1000; // 1 second interval
             countDownTimer.Elapsed += OnTimedEvent;
             countDownTimer.Start();
+
             timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
+            // Assuming you have a GridLayout in your XML layout with the id answerGridLayout
+            answerGridLayout = FindViewById<GridLayout>(Resource.Id.answerGridLayout);
 
-            // Get the LinearLayout container for answer buttons
-            answersLayout = FindViewById<LinearLayout>(Resource.Id.answersLayout);
-
-
-            // Add AnswerButtons dynamically
-            AddAnswerButton("Paris");
-            AddAnswerButton("Berlin");
-            AddAnswerButton("London");
-            AddAnswerButton("Madrid");
-            // Create your application here
+            // Add buttons to GridLayout
+            AddButtons();
         }
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
@@ -84,35 +81,58 @@ namespace Chaser
             // Update the TextView with the remaining time
             tvCountdown.Text = formattedTime.ToString();
         }
-        private void AddAnswerButton(string answerText)
+        private void AddButtons()
         {
-            // Create a new instance of AnswerButton
-            AnswerButton answerButton = new AnswerButton(this, isTrue: false)
+            // Create AnswerButtons
+            answerButtons = new AnswerButton[]
             {
-                LayoutParameters = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MatchParent,
-                    ViewGroup.LayoutParams.WrapContent
-                ),
-                Text = answerText,
-                BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.ParseColor("#3498db")),
-                Alpha = 0.8f,
-                TextSize = 18f,
+        new AnswerButton(this, true),
+        new AnswerButton(this, false),
+        new AnswerButton(this, false),
+        new AnswerButton(this, false)
             };
 
-            // Set text color using the SetTextColor method
-            answerButton.SetTextColor(Android.Graphics.Color.White);
+            // Set common layout parameters for buttons
+        ViewGroup.MarginLayoutParams buttonLayoutParams = new ViewGroup.MarginLayoutParams(
+        ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent
+        );
 
-            // Set padding using the SetPadding method
-            answerButton.SetPadding(16, 16, 16, 16);
 
-            // Attach an event handler for the button click
-            answerButton.ButtonClick += (sender, e) =>
+            // Set margins for buttons
+            int margin = 8; // Change this value as needed
+            buttonLayoutParams.SetMargins(margin, margin, margin, margin);
+
+            // Set background colors and add buttons to GridLayout
+            for (int i = 0; i < answerButtons.Length; i++)
             {
-                // Handle button click event
-            };
+                var button = answerButtons[i];
 
-            // Add the AnswerButton to the LinearLayout
-            answersLayout.AddView(answerButton);
+                if (button != null)
+                {
+                    // Set background color for the button
+                    var colorFilter = new PorterDuffColorFilter(GetButtonColor(i), PorterDuff.Mode.Src);
+                    button.Background.SetColorFilter(colorFilter);
+
+                    // Add the button to GridLayout
+                    answerGridLayout.AddView(button, buttonLayoutParams);
+
+                    // Set rounded corners for buttons
+                    button.SetBackgroundResource(Resource.Drawable.quizButtons);
+                }
+            }
+        }
+        // Helper method to get different colors for each button
+        private Android.Graphics.Color GetButtonColor(int index)
+        {
+            // Example: Assign different colors based on the button index
+            switch (index)
+            {
+                case 0: return Android.Graphics.Color.ParseColor("#FF5252");
+                case 1: return Android.Graphics.Color.ParseColor("#69F0AE");
+                case 2: return Android.Graphics.Color.ParseColor("#64B5F6");
+                case 3: return Android.Graphics.Color.ParseColor("#FFD600");
+                default: return Android.Graphics.Color.Gray;
+            }
         }
     }
 }
