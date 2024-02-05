@@ -65,11 +65,9 @@ namespace Chaser
                 ShowCustomDialog();
             };
 
-            // Find the existing LinearLayout by its ID
-            var linearLayout = FindViewById<LinearLayout>(Resource.Id.answers);
 
             // Create and set up AnswerButtons
-            AddAnswerButtons(linearLayout);
+            InitializeAnswerButtonsArray();
         }
         public void SetPlayerLogo()
         {
@@ -172,29 +170,23 @@ namespace Chaser
             tvCountdown.Text = formattedTime.ToString();           
         }
 
-        private void AddAnswerButtons(LinearLayout linearLayout)
-        {            
-            // Create and add 4 AnswerButtons to the LinearLayout
-            for (int i = 0; i < 4; i++)
+        private void InitializeAnswerButtonsArray()
+        {
+            answersButtons = new AnswerButton[]
             {
-                Answer answer = qAndA.answers[i];
-                var answerButton = new AnswerButton(this, answer.isTrue);
-                answerButton.Text=answer.answerText;
-                linearLayout.AddView(answerButton);
-                // מוסיף את הרווחים בין הכפתורים
-                if (i < 3)
-                {
-                    var spacer = new View(this);
-                    spacer.LayoutParameters = new LinearLayout.LayoutParams(
-                        (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 16, Resources.DisplayMetrics),
-                        (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, Resources.DisplayMetrics)
-                    );
-                    linearLayout.AddView(spacer);
-                }
-                // מקשר בין הלחיצה של הכפתור לפעולה
-                answerButton.ButtonClick += OnAnswerButtonClick;
-                answersButtons[i] = answerButton;
+                FindViewById<AnswerButton>(Resource.Id.button1),
+                FindViewById<AnswerButton>(Resource.Id.button2),
+                FindViewById<AnswerButton>(Resource.Id.button3),
+                FindViewById<AnswerButton>(Resource.Id.button4)
+            };
+
+            // Set the buttons to dusty pink
+            foreach (var button in answersButtons)
+            {
+                button.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.ParseColor("#D2B4B4"));
+                button.Click += OnAnswerButtonClick;
             }
+            UpdateScreen();
         }
 
         private void OnAnswerButtonClick(object sender, EventArgs e)

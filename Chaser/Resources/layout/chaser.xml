@@ -136,65 +136,74 @@
 
     <!-- Answer Buttons at the bottom -->
     <LinearLayout
-        android:id ="@+id/answers"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        >
-        <!--
-        <Button
-            android:id="@+id/answer1"
-            android:layout_width=""
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="1"
-            android:textColor="#FFFFFF"
-            android:onClick="moveButtonClick"
-            android:backgroundTint="@android:color/black"
-            android:onClick="OnButtonClick"
-            />
-        <View
-            android:layout_width="16dp"
-            android:layout_height="1dp" />
+    android:id="@+id/answers"
+    android:layout_alignParentBottom="true"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="16dp">
 
-        <Button
-            android:id="@+id/answer2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="2"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@android:color/black"/>
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button1"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/quizbuttons"
+        android:backgroundTint="#D2B4B4"
+        android:textSize="12sp" 
+        android:gravity="center" 
+        />
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="1dp" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="0.1" />
 
-        <Button
-            android:id="@+id/answer3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="3"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@android:color/black"/>
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/quizButtons"
+        android:backgroundTint="#D2B4B4"
+        android:textSize="12sp" 
+        android:gravity="center" 
+         /> 
 
-        <View
-            android:layout_width="16dp"
-            android:layout_height="1dp" />
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="0.1" />
 
-        <Button
-            android:id="@+id/answer4"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="4"
-            android:textColor="#FFFFFF"
-            android:backgroundTint="@android:color/black"/>-->
-    </LinearLayout>
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="40dp" 
+        android:layout_weight="1"
+        android:background="@drawable/quizButtons"
+        android:backgroundTint="#D2B4B4"
+        android:textSize="12sp" 
+        android:gravity="center" 
+         /> 
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="0.1" />
+
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="40dp" 
+        android:layout_weight="1"
+        android:background="@drawable/quizButtons"
+        android:backgroundTint="#D2B4B4"
+        android:textSize="12sp" 
+        android:gravity="center" 
+         /> 
+</LinearLayout>
+
+
 
 </RelativeLayout>
 

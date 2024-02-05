@@ -27,81 +27,86 @@ namespace Chaser
         private ValueAnimator progressAnimator;
         private QuizHandler quizHandler;
         private AnswerButton[] answerButtons;
+        private QAndA qAndA;
+        private TextView questionText;
+        private int questionNum = 1;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.quizLayout);
             quizHandler = new QuizHandler();
+            timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
             tvCountdown = FindViewById<TextView>(Resource.Id.timerTextView);
+
             secondsRemaining = 120;
             countDownTimer = new Timer();
             countDownTimer.Interval = 1000; // 1 second interval
             countDownTimer.Elapsed += OnTimedEvent;
             countDownTimer.Start();
+            AnimateProgressBar();
+            questionText = FindViewById<TextView>(Resource.Id.questionTextView);
 
-            timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
-            // Assuming you have a GridLayout in your XML layout with the id answerGridLayout
-            //var answersLayout = FindViewById<GridLayout>(Resource.Id.quizAnswers);
-            //מייצר את המערך של הכפתורים
             answerButtons = new AnswerButton[4];
-            AnswerButton button1 = FindViewById<AnswerButton>(Resource.Id.button1);
-            button1.Text = "Shalom";
-            // Add buttons to GridLayout
-            //AddAnswerButtons(answersLayout);
+            //מייצר את המערך של הכפתורים
+            InitializeAnswerButtons();
+            UpdateScreen();
         }
-        private void AddAnswerButtons(GridLayout gridLayout)
+        public void UpdateScreen()
         {
-            // Calculate button size based on screen width
-            int buttonSizeDp = 40;
-            int buttonSizePx = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, buttonSizeDp, Resources.DisplayMetrics);
+            qAndA = quizHandler.GetRandomQuestion();
+            questionText.Text =questionNum+". "+ qAndA.question;
 
-            QAndA qAndA = quizHandler.GetRandomQuestion();
-            // Create and add 4 AnswerButtons to the GridLayout
             for (int i = 0; i < 4; i++)
             {
                 Answer answer = qAndA.answers[i];
-                var answerButton = new AnswerButton(this, answer.isTrue);
-                answerButton.Text = answer.answerText;
-
-                // Set layout parameters for buttons
-                GridLayout.LayoutParams buttonLayoutParams = new GridLayout.LayoutParams
-                {
-                    Width = buttonSizePx,
-                    Height = buttonSizePx,
-                    RowSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 1f),
-                    ColumnSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 1f)
-                };
-
-                // Set background color for the button
-                var colorFilter = new PorterDuffColorFilter(GetButtonColor(i), PorterDuff.Mode.Src);
-                answerButton.Background.SetColorFilter(colorFilter);
-
-                // Add the button to GridLayout
-                gridLayout.AddView(answerButton, buttonLayoutParams);
-
-                // Set rounded corners for buttons
-                answerButton.SetBackgroundResource(Resource.Drawable.quizButtons);
-
-                // Add spacer between buttons
-                if (i < 3)
-                {
-                    var spacer = new View(this);
-                    spacer.LayoutParameters = new GridLayout.LayoutParams
-                    {
-                        Width = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, Resources.DisplayMetrics),
-                        Height = ViewGroup.LayoutParams.WrapContent,
-                        RowSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 1f),
-                        ColumnSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 0f)
-                    };
-                    gridLayout.AddView(spacer);
-                }
-
-                // Connect button click event
-                //answerButton.ButtonClick += OnAnswerButtonClick;
-                answerButtons[i] = answerButton;
+                answerButtons[i].Text = answer.answerText;
+                answerButtons[i].IsTrue = answer.isTrue;
             }
         }
+        private void InitializeAnswerButtons()
+        {
+            // Update the array definition at the beginning of your activity
+            answerButtons[0] = FindViewById<AnswerButton>(Resource.Id.button1);
+            answerButtons[1] = FindViewById<AnswerButton>(Resource.Id.button2);
+            answerButtons[2] = FindViewById<AnswerButton>(Resource.Id.button3);
+            answerButtons[3] = FindViewById<AnswerButton>(Resource.Id.button4);
 
+            // Loop through each button to customize them
+            for (int i = 0; i < answerButtons.Length; i++)
+            {
+                AnswerButton button = answerButtons[i];
+
+                // Set elegant background color and text
+                button.BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(GetButtonColor(i));
+                button.Text = $"Button {i + 1}";
+
+                // Set up click event handler
+                button.Click += AnswerButtonClick;
+            }
+        }
+        // Handle button clicks
+        private void AnswerButtonClick(object sender, EventArgs e)
+        {
+            AnswerButton clickedButton = (AnswerButton)sender;
+
+            // Check if the clicked answer is correct
+            if (clickedButton.IsTrue)
+            {
+                // Display a toast for correct answer
+                Toast.MakeText(this, "Correct!", ToastLength.Short).Show();
+            }
+            else
+            {
+                // Display a toast for incorrect answer
+                Toast.MakeText(this, "Incorrect. Try again!", ToastLength.Short).Show();
+            }
+
+            // Increment questionNum
+            questionNum++;
+
+            // Update the screen for the next question
+            UpdateScreen();
+        }
 
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
@@ -112,8 +117,6 @@ namespace Chaser
                 if (secondsRemaining >= 0)
                 {
                     UpdateCountdown(secondsRemaining);
-                    int progress = (int)(((float)secondsRemaining));
-                    AnimateProgressBar(progress);
                 }
                 else
                 {
@@ -122,11 +125,25 @@ namespace Chaser
                 }
             });
         }
-        private void AnimateProgressBar(int progress)
+
+        private void AnimateProgressBar()
         {
-            // Use ObjectAnimator for smooth progress animation
-            ObjectAnimator animation = ObjectAnimator.OfInt(timeProgressBar, "progress", timeProgressBar.Progress, progress);
-            animation.SetDuration(1000); // Animation duration in milliseconds
+            ValueAnimator animation = ValueAnimator.OfInt(timeProgressBar.Progress, 0);
+            animation.SetDuration(120000); // Animation duration in milliseconds (2 minutes)
+            animation.SetInterpolator(new Android.Views.Animations.LinearInterpolator()); // Use a linear interpolator for a constant speed
+
+            animation.Update += (sender, e) =>
+            {
+                int value = (int)animation.AnimatedValue;
+                Android.OS.Handler handler = new Android.OS.Handler(Looper.MainLooper);
+                handler.Post(() => timeProgressBar.Progress = value);
+            };
+
+            animation.AnimationEnd += (sender, e) =>
+            {
+                // Animation has ended, you can perform any additional actions here
+            };
+
             animation.Start();
         }
         private void UpdateCountdown(int seconds)
@@ -137,15 +154,14 @@ namespace Chaser
             tvCountdown.Text = formattedTime.ToString();
         }
         // Helper method to get different colors for each button
-        private Android.Graphics.Color GetButtonColor(int index)
+        private Color GetButtonColor(int index)
         {
-            // Example: Assign different colors based on the button index
             switch (index)
             {
-                case 0: return Android.Graphics.Color.ParseColor("#FF5252");
-                case 1: return Android.Graphics.Color.ParseColor("#69F0AE");
-                case 2: return Android.Graphics.Color.ParseColor("#64B5F6");
-                case 3: return Android.Graphics.Color.ParseColor("#FFD600");
+                case 0: return Android.Graphics.Color.ParseColor("#FF8A80"); // A shade of red
+                case 1: return Android.Graphics.Color.ParseColor("#81C784"); // A shade of green
+                case 2: return Android.Graphics.Color.ParseColor("#64B5F6"); // A shade of blue-gray
+                case 3: return Android.Graphics.Color.ParseColor("#FFD54F"); // A shade of yellow
                 default: return Android.Graphics.Color.Gray;
             }
         }

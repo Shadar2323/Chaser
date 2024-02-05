@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F0F0F0">
+    android:background="#F0F0F0"
+    android:layoutDirection="ltr">
 
     <!-- Timer and Progress Bar -->
     <RelativeLayout
@@ -14,7 +15,7 @@
             android:id="@+id/timerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="00:00"
+            android:text="02:00"
             android:textSize="28sp"
             android:textColor="#333333" />
 
@@ -69,7 +70,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_below="@id/topLayout"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/questionTextView"
@@ -88,25 +89,22 @@
     android:layout_below="@id/questionLayout"
     android:layout_above="@id/answeredCorrectlyLayout"
     android:rowCount="2"
-    android:columnCount="2"
-    android:padding="16dp">
+    android:columnCount="2">
 
     <!-- Answer Buttons -->
     <com.companyname.chaser.AnswerButton
         android:id="@+id/button1"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_columnWeight="1"
-        android:layout_rowWeight="1"
+        android:layout_height="20dp"
         android:layout_gravity="fill"
         android:layout_margin="8dp"
-        android:background="@drawable/quizButtons" 
-         android:backgroundTint="@android:color/holo_red_dark"   />
+        android:background="@drawable/quizbuttons"
+        android:backgroundTint="@android:color/holo_red_dark"   />
 
     <com.companyname.chaser.AnswerButton
         android:id="@+id/button2"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="20dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_gravity="fill"
@@ -116,7 +114,7 @@
     <com.companyname.chaser.AnswerButton
         android:id="@+id/button3"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="20dp"
         android:layout_columnWeight="1"
         android:layout_rowWeight="1"
         android:layout_gravity="fill"
