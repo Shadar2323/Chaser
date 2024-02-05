@@ -80,9 +80,7 @@
             android:layout_marginBottom="16dp"
             android:textColor="@android:color/holo_blue_light"
             />
-    </LinearLayout>
-
-    <!-- Grid Layout for Answer Buttons (Empty for now) -->
+    </LinearLayout> 
     <GridLayout
     android:id="@+id/answerGridLayout"
     android:layout_width="match_parent"
@@ -92,7 +90,48 @@
     android:rowCount="2"
     android:columnCount="2"
     android:padding="16dp">
-    </GridLayout>
 
+    <!-- Answer Buttons -->
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:background="@drawable/quizButtons" 
+         android:backgroundTint="@android:color/holo_red_dark"   />
+
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:background="@drawable/quizButtons" />
+
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:background="@drawable/quizButtons" />
+
+    <com.companyname.chaser.AnswerButton
+        android:id="@+id/button4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1"
+        android:layout_gravity="fill"
+        android:layout_margin="8dp"
+        android:background="@drawable/quizButtons" />
+</GridLayout>
 
 </RelativeLayout>

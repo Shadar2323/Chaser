@@ -1,34 +1,46 @@
-﻿using Android.App;
-using Android.Content;
-using Android.OS;
+﻿using Android.Content;
+using Android.Graphics;
 using Android.Runtime;
 using Android.Util;
 using Android.Views;
 using Android.Widget;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Android.Graphics;
 
 namespace Chaser
 {
+    [Register("com.companyname.chaser.AnswerButton")]
     public class AnswerButton : Button
     {
-        public bool isTrue { get; set;}
+        public bool IsTrue { get; set; }
         public event EventHandler ButtonClick;
-        public AnswerButton(Context context, bool isTrue) : base(context)
+
+        public AnswerButton(Context context, IAttributeSet attrs) : base(context, attrs)
         {
-            this.isTrue = isTrue;
             InitializeButton();
         }
+
+        public AnswerButton(Context context, bool isTrue) : base(context)
+        {
+            this.IsTrue = isTrue;
+            InitializeButton();
+        }
+
+        public AnswerButton(Context context, IAttributeSet attrs, int defStyleAttr) : base(context, attrs, defStyleAttr)
+        {
+            InitializeButton();
+        }
+
+        public AnswerButton(Context context, IAttributeSet attrs, int defStyleAttr, int defStyleRes) : base(context, attrs, defStyleAttr, defStyleRes)
+        {
+            InitializeButton();
+        }
+
         private void InitializeButton()
         {
             // Set properties to mimic the desired appearance
             LayoutParameters = new LinearLayout.LayoutParams(
-                0,
                 ViewGroup.LayoutParams.WrapContent,
-                1.0f
+                ViewGroup.LayoutParams.WrapContent
             );
             SetTextColor(Color.White);
             BackgroundTintList = Android.Content.Res.ColorStateList.ValueOf(Color.Black);
@@ -40,6 +52,5 @@ namespace Chaser
                 ButtonClick?.Invoke(this, EventArgs.Empty);
             };
         }
-
     }
 }

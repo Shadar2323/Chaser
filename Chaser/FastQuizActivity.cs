@@ -4,6 +4,7 @@ using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
+using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Java.Util.Logging;
@@ -22,16 +23,14 @@ namespace Chaser
         private int secondsRemaining;
         private TextView tvCountdown;
         private ProgressBar timeProgressBar;
-        private LinearLayout answersLayout;
         private int totalTimeInSeconds = 120;
         private ValueAnimator progressAnimator;
-        QuizHandler quizHandler;
-        private GridLayout answerGridLayout;
+        private QuizHandler quizHandler;
         private AnswerButton[] answerButtons;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-            SetContentView(Resource.Layout.fastQuizLayout);
+            SetContentView(Resource.Layout.quizLayout);
             quizHandler = new QuizHandler();
             tvCountdown = FindViewById<TextView>(Resource.Id.timerTextView);
             secondsRemaining = 120;
@@ -42,11 +41,68 @@ namespace Chaser
 
             timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
             // Assuming you have a GridLayout in your XML layout with the id answerGridLayout
-            answerGridLayout = FindViewById<GridLayout>(Resource.Id.answerGridLayout);
-
+            //var answersLayout = FindViewById<GridLayout>(Resource.Id.quizAnswers);
+            //מייצר את המערך של הכפתורים
+            answerButtons = new AnswerButton[4];
+            AnswerButton button1 = FindViewById<AnswerButton>(Resource.Id.button1);
+            button1.Text = "Shalom";
             // Add buttons to GridLayout
-            AddButtons();
+            //AddAnswerButtons(answersLayout);
         }
+        private void AddAnswerButtons(GridLayout gridLayout)
+        {
+            // Calculate button size based on screen width
+            int buttonSizeDp = 40;
+            int buttonSizePx = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, buttonSizeDp, Resources.DisplayMetrics);
+
+            QAndA qAndA = quizHandler.GetRandomQuestion();
+            // Create and add 4 AnswerButtons to the GridLayout
+            for (int i = 0; i < 4; i++)
+            {
+                Answer answer = qAndA.answers[i];
+                var answerButton = new AnswerButton(this, answer.isTrue);
+                answerButton.Text = answer.answerText;
+
+                // Set layout parameters for buttons
+                GridLayout.LayoutParams buttonLayoutParams = new GridLayout.LayoutParams
+                {
+                    Width = buttonSizePx,
+                    Height = buttonSizePx,
+                    RowSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 1f),
+                    ColumnSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 1f)
+                };
+
+                // Set background color for the button
+                var colorFilter = new PorterDuffColorFilter(GetButtonColor(i), PorterDuff.Mode.Src);
+                answerButton.Background.SetColorFilter(colorFilter);
+
+                // Add the button to GridLayout
+                gridLayout.AddView(answerButton, buttonLayoutParams);
+
+                // Set rounded corners for buttons
+                answerButton.SetBackgroundResource(Resource.Drawable.quizButtons);
+
+                // Add spacer between buttons
+                if (i < 3)
+                {
+                    var spacer = new View(this);
+                    spacer.LayoutParameters = new GridLayout.LayoutParams
+                    {
+                        Width = (int)TypedValue.ApplyDimension(ComplexUnitType.Dip, 1, Resources.DisplayMetrics),
+                        Height = ViewGroup.LayoutParams.WrapContent,
+                        RowSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 1f),
+                        ColumnSpec = GridLayout.InvokeSpec(GridLayout.Undefined, 0f)
+                    };
+                    gridLayout.AddView(spacer);
+                }
+
+                // Connect button click event
+                //answerButton.ButtonClick += OnAnswerButtonClick;
+                answerButtons[i] = answerButton;
+            }
+        }
+
+
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             RunOnUiThread(() =>
@@ -73,53 +129,12 @@ namespace Chaser
             animation.SetDuration(1000); // Animation duration in milliseconds
             animation.Start();
         }
-
         private void UpdateCountdown(int seconds)
         {
             // Format the time as "mm:ss"
             string formattedTime = $"{(seconds / 60):D2}:{(seconds % 60):D2}";
             // Update the TextView with the remaining time
             tvCountdown.Text = formattedTime.ToString();
-        }
-        private void AddButtons()
-        {
-            // Create AnswerButtons
-            answerButtons = new AnswerButton[]
-            {
-        new AnswerButton(this, true),
-        new AnswerButton(this, false),
-        new AnswerButton(this, false),
-        new AnswerButton(this, false)
-            };
-
-            // Set common layout parameters for buttons
-        ViewGroup.MarginLayoutParams buttonLayoutParams = new ViewGroup.MarginLayoutParams(
-        ViewGroup.LayoutParams.MatchParent, ViewGroup.LayoutParams.WrapContent
-        );
-
-
-            // Set margins for buttons
-            int margin = 8; // Change this value as needed
-            buttonLayoutParams.SetMargins(margin, margin, margin, margin);
-
-            // Set background colors and add buttons to GridLayout
-            for (int i = 0; i < answerButtons.Length; i++)
-            {
-                var button = answerButtons[i];
-
-                if (button != null)
-                {
-                    // Set background color for the button
-                    var colorFilter = new PorterDuffColorFilter(GetButtonColor(i), PorterDuff.Mode.Src);
-                    button.Background.SetColorFilter(colorFilter);
-
-                    // Add the button to GridLayout
-                    answerGridLayout.AddView(button, buttonLayoutParams);
-
-                    // Set rounded corners for buttons
-                    button.SetBackgroundResource(Resource.Drawable.quizButtons);
-                }
-            }
         }
         // Helper method to get different colors for each button
         private Android.Graphics.Color GetButtonColor(int index)

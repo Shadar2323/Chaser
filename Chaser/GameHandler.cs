@@ -24,10 +24,11 @@ namespace Chaser
         private Settings settings;
         public GameHandler() : base()
         {
-            chaserPlacement = 7;
-            questionList = setQuestionsList();
             settings = Settings.Instance;
             diff = settings.Diff;
+            chaserPlacement = 7;
+            questionList = setQuestionsList();
+            
             // The base class constructor (TriviaHandler constructor) is called using "base()"
             // No need to reinitialize members already initialized in TriviaHandler
 

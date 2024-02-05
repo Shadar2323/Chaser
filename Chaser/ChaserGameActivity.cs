@@ -203,7 +203,7 @@ namespace Chaser
             // Handle the button click in the activity
             if (sender is AnswerButton clickedButton)
             {
-                if (clickedButton.isTrue)
+                if (clickedButton.IsTrue)
                 {
                     // The clicked button is marked as true
                     Toast.MakeText(this, "Correct!", ToastLength.Short).Show();
@@ -259,7 +259,7 @@ namespace Chaser
             {
                 Answer answer = qAndA.answers[i];
                 answersButtons[i].Text = answer.answerText;
-                answersButtons[i].isTrue = answer.isTrue;
+                answersButtons[i].IsTrue = answer.isTrue;
             }
             ResetTimer();
         }
