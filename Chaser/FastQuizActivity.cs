@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Timers;
 
 namespace Chaser
@@ -19,9 +20,9 @@ namespace Chaser
     [Activity(Label = "FastQuizActivity")]
     public class FastQuizActivity : Activity
     {
-        private Timer countDownTimer;
-        private int secondsRemaining;
-        private TextView tvCountdown;
+        private static bool isRunning = true;
+        private static int secondsRemaining = 120; // Initial countdown time in seconds
+        private static TextView tvCountdown;
         private ProgressBar timeProgressBar;
         private int totalTimeInSeconds = 120;
         private ValueAnimator progressAnimator;
@@ -38,11 +39,9 @@ namespace Chaser
             timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
             tvCountdown = FindViewById<TextView>(Resource.Id.timerTextView);
 
-            secondsRemaining = 120;
-            countDownTimer = new Timer();
-            countDownTimer.Interval = 1000; // 1 second interval
-            countDownTimer.Elapsed += OnTimedEvent;
-            countDownTimer.Start();
+            // Create a new thread and start it
+            Thread thread = new Thread(new ThreadStart(CountdownThread));
+            thread.Start();
             AnimateProgressBar();
             questionText = FindViewById<TextView>(Resource.Id.questionTextView);
 
@@ -108,22 +107,26 @@ namespace Chaser
             UpdateScreen();
         }
 
-        private void OnTimedEvent(object sender, ElapsedEventArgs e)
+        private static void CountdownThread()
         {
-            RunOnUiThread(() =>
+            while (true)
             {
+                Thread.Sleep(1000); // Sleep for 1 second
+
+                // Decrease the countdown timer
                 secondsRemaining--;
 
                 if (secondsRemaining >= 0)
                 {
+                    // Update the countdown UI (assuming this method exists)
                     UpdateCountdown(secondsRemaining);
                 }
                 else
                 {
                     // Handle countdown completion
-                    countDownTimer.Stop();
+                    break; // Exit the loop
                 }
-            });
+            }
         }
 
         private void AnimateProgressBar()
@@ -146,7 +149,7 @@ namespace Chaser
 
             animation.Start();
         }
-        private void UpdateCountdown(int seconds)
+        private static void UpdateCountdown(int seconds)
         {
             // Format the time as "mm:ss"
             string formattedTime = $"{(seconds / 60):D2}:{(seconds % 60):D2}";
