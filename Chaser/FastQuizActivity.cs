@@ -20,9 +20,9 @@ namespace Chaser
     [Activity(Label = "FastQuizActivity")]
     public class FastQuizActivity : Activity
     {
-        private static bool isRunning = true;
-        private static int secondsRemaining = 120; // Initial countdown time in seconds
-        private static TextView tvCountdown;
+        private bool isRunning = true;
+        private int secondsRemaining = 120; // Initial countdown time in seconds
+        private TextView tvCountdown;
         private ProgressBar timeProgressBar;
         private int totalTimeInSeconds = 120;
         private ValueAnimator progressAnimator;
@@ -107,9 +107,9 @@ namespace Chaser
             UpdateScreen();
         }
 
-        private static void CountdownThread()
+        private void CountdownThread()
         {
-            while (true)
+            while (secondsRemaining > 0)
             {
                 Thread.Sleep(1000); // Sleep for 1 second
 
@@ -118,15 +118,12 @@ namespace Chaser
 
                 if (secondsRemaining >= 0)
                 {
-                    // Update the countdown UI (assuming this method exists)
-                    UpdateCountdown(secondsRemaining);
-                }
-                else
-                {
-                    // Handle countdown completion
-                    break; // Exit the loop
+                    // Update the countdown UI on the main thread
+                    RunOnUiThread(() => UpdateCountdown(secondsRemaining));
                 }
             }
+
+            // Countdown finished, handle completion here
         }
 
         private void AnimateProgressBar()
@@ -149,12 +146,12 @@ namespace Chaser
 
             animation.Start();
         }
-        private static void UpdateCountdown(int seconds)
+        private void UpdateCountdown(int seconds)
         {
             // Format the time as "mm:ss"
             string formattedTime = $"{(seconds / 60):D2}:{(seconds % 60):D2}";
             // Update the TextView with the remaining time
-            tvCountdown.Text = formattedTime.ToString();
+            tvCountdown.Text = formattedTime;
         }
         // Helper method to get different colors for each button
         private Color GetButtonColor(int index)

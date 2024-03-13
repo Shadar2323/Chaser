@@ -19,14 +19,19 @@ namespace Chaser
     public class DatabaseHelper
     {
         SQLiteConnection database;
-        const string tableName = "QAndA";
+        const string questionTableName = "QAndA";
+        const string playerTableName = "Players";
         public DatabaseHelper(string dbPath)
         {
             database = new SQLiteConnection(dbPath);
-            if (!TableExists())
+            if (!TableExists(questionTableName))
             {
                 database.CreateTable<QAndA>();
                 InitializeDatabase();
+            }
+            if (!TableExists(playerTableName))
+            {
+                database.CreateTable<Player>();
             }
         }
         void InitializeDatabase()
@@ -62,7 +67,6 @@ namespace Chaser
                 return database.Insert(q);
             }
         }
-
         public List<QAndA> GetQuestionsByDifficulty(string difficulty)
         {
             var questions = database.Table<QAndA>().Where(q => q.diff == difficulty).ToList();
@@ -72,10 +76,33 @@ namespace Chaser
             }
             return questions;
         }
-        public bool TableExists()
+        public bool TableExists(string name)
         {
-            var tableInfo = database.GetTableInfo(tableName);
+            var tableInfo = database.GetTableInfo(name);
             return tableInfo.Count > 0;
+        }
+        public bool RegisterUser(string userName, string password)
+        {
+            if (!database.Table<Player>().Any(x => x.UserName == userName))
+            {
+                var player = new Player { UserName = userName, Password = password };
+                database.Insert(player);
+                return true;
+            }
+            return false; // Username already exists
+        }
+        public bool AuthenticateUser(string userName, string password)
+        {
+            return database.Table<Player>().Any(x => x.UserName == userName && x.Password == password);
+        }
+        public void UpdateRecord(string userName, int newRecord)
+        {
+            var player = database.Table<Player>().FirstOrDefault(x => x.UserName == userName);
+            if (player != null)
+            {
+                player.Record = newRecord;
+                database.Update(player);
+            }
         }
     }
 }
