@@ -17,6 +17,7 @@ namespace Chaser
         Button chaserButton;
         Button fastQuiz;
         Button register;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);

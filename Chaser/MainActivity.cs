@@ -17,9 +17,8 @@ namespace Chaser
         private Button registerButton;
         private DatabaseHelper databaseHelper;
         private CheckBox rememberUsernameCheckbox;
+        private SessionManager _sessionManager;
 
-        private const string RememberUsernameKey = "RememberUsername";
-        private const string UsernameKey = "Username";
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -27,6 +26,8 @@ namespace Chaser
 
             string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
             databaseHelper = new DatabaseHelper(dbPath);
+            _sessionManager = new SessionManager(GetSharedPreferences("LoginPrefs", FileCreationMode.Private));
+
 
             usernameEditText = FindViewById<EditText>(Resource.Id.usernameEditText);
             passwordEditText = FindViewById<EditText>(Resource.Id.passwordEditText);
@@ -36,10 +37,25 @@ namespace Chaser
 
             loginButton.Click += LoginButton_Click;
             registerButton.Click += RegisterButton_Click;
-            // Load remembered username
-            LoadRememberedUsername();
+            // Auto-login if the user is already logged in
+            if (_sessionManager.IsLoggedIn())
+            {
+                StartHomeScreenActivity();
+            }
+            else
+            {
+                LoadRememberedUsername();
+            }
         }
-
+        private void LoadRememberedUsername()
+        {
+            if (_sessionManager.IsLoggedIn())
+            {
+                string savedUsername = _sessionManager.GetSavedUsername();
+                usernameEditText.Text = savedUsername;
+                rememberUsernameCheckbox.Checked = true;
+            }
+        }
         private void LoginButton_Click(object sender, EventArgs e)
         {
             string username = usernameEditText.Text;
@@ -52,16 +68,17 @@ namespace Chaser
                 return;
             }
 
-            // Authenticate user
             bool isAuthenticated = databaseHelper.AuthenticateUser(username, password);
             if (isAuthenticated)
             {
                 // Save username preference after successful authentication
-                SaveUsernamePreference(username);
+                _sessionManager.SaveUsername(username);
+
+                // Save session state
+                _sessionManager.SaveLoggedInState(true);
 
                 Toast.MakeText(this, "Login successful", ToastLength.Short).Show();
-                Intent homeScreenIntent = new Intent(this, typeof(HomeScreenActivity));
-                StartActivity(homeScreenIntent);
+                StartHomeScreenActivity();
             }
             else
             {
@@ -72,32 +89,11 @@ namespace Chaser
         {
             StartActivity(typeof(RegisterActivity));
         }
-        private void LoadRememberedUsername()
+        private void StartHomeScreenActivity()
         {
-            var prefs = GetSharedPreferences("LoginPrefs", FileCreationMode.Private);
-            bool rememberUsername = prefs.GetBoolean(RememberUsernameKey, false);
-            if (rememberUsername)
-            {
-                string savedUsername = prefs.GetString(UsernameKey, "");
-                usernameEditText.Text = savedUsername;
-                rememberUsernameCheckbox.Checked = true;
-            }
-        }
-
-        private void SaveUsernamePreference(string username)
-        {
-            var prefs = GetSharedPreferences("LoginPrefs", FileCreationMode.Private);
-            var editor = prefs.Edit();
-            editor.PutBoolean("RememberUsername", rememberUsernameCheckbox.Checked);
-            if (rememberUsernameCheckbox.Checked)
-            {
-                editor.PutString("Username", username);
-            }
-            else
-            {
-                editor.Remove("Username");
-            }
-            editor.Apply(); // Use Apply instead of Commit for asynchronous saving
+            Intent homeScreenIntent = new Intent(this, typeof(HomeScreenActivity));
+            StartActivity(homeScreenIntent);
+            Finish(); // Finish MainActivity so that pressing back doesn't return here
         }
     }
 }
