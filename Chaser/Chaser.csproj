@@ -205,9 +205,19 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\quiz_ending_dialog.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\menu\menu_drawer.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\dialog_background.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\button_background.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

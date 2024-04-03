@@ -53,5 +53,11 @@ namespace Chaser
             editor.Clear();
             editor.Apply();
         }
+        public void ClearSavedUsername()
+        {
+            var editor = _prefs.Edit();
+            editor.Remove(UsernameKey);
+            editor.Apply();
+        }
     }
 }

@@ -118,7 +118,7 @@ namespace Chaser
             {
                 // Handle Return to Home button click
                 // You can navigate to the home screen or perform any action here
-                Intent mainActivityIntent = new Intent(this, typeof(MainActivity));
+                Intent mainActivityIntent = new Intent(this, typeof(HomeScreenActivity));
                 StartActivity(mainActivityIntent);
             };
 
@@ -304,7 +304,7 @@ namespace Chaser
             {
                 // Handle the "Return Home" button click
                 // You can implement the logic to return to the home screen
-                Intent mainActivityIntent = new Intent(this, typeof(MainActivity));
+                Intent mainActivityIntent = new Intent(this, typeof(HomeScreenActivity));
                 StartActivity(mainActivityIntent);
             });
 

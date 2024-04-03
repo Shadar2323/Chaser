@@ -71,11 +71,22 @@ namespace Chaser
             bool isAuthenticated = databaseHelper.AuthenticateUser(username, password);
             if (isAuthenticated)
             {
-                // Save username preference after successful authentication
-                _sessionManager.SaveUsername(username);
+                if (rememberUsernameCheckbox.Checked)
+                {
+                    // Save username preference if checkbox is checked
+                    _sessionManager.SaveUsername(username);
 
-                // Save session state
-                _sessionManager.SaveLoggedInState(true);
+                    // Save session state only if checkbox is checked
+                    _sessionManager.SaveLoggedInState(true);
+                }
+                else
+                {
+                    // Clear saved username if checkbox is not checked
+                    _sessionManager.ClearSavedUsername();
+
+                    // Clear session state if checkbox is not checked
+                    _sessionManager.SaveLoggedInState(false);
+                }
 
                 Toast.MakeText(this, "Login successful", ToastLength.Short).Show();
                 StartHomeScreenActivity();
@@ -85,6 +96,7 @@ namespace Chaser
                 Toast.MakeText(this, "Invalid username or password", ToastLength.Short).Show();
             }
         }
+
         private void RegisterButton_Click(object sender, EventArgs e)
         {
             StartActivity(typeof(RegisterActivity));

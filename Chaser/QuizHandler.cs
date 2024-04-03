@@ -12,19 +12,30 @@ using System.IO;
 
 namespace Chaser
 {
-    internal class QuizHandler: TriviaHandler
+    internal class QuizHandler : TriviaHandler
     {
-        private int count = 0;
-        private int record;
-        public QuizHandler(): base()
+        public int currentRecord {get;set;}
+        public string username;
+        
+        public QuizHandler(string userName): base()
         {
-            questionList = GetQuestions(); 
-            //record = database.Record;
+            questionList = GetQuestions();
+            Player p = databaseHelper.GetCurrentPlayer(userName);
+            currentRecord = p.Record;
+            this.username = userName;
         }
         public List<QAndA> GetQuestions()
         {
             return databaseHelper.GetQuestions();
         }
-
+        public bool IsRecordHigher(int record)
+        {
+            if (record>this.currentRecord)
+            {
+                databaseHelper.UpdateRecord(this.username, record);
+                return true;
+            }
+            return false;
+        }
     }
 }

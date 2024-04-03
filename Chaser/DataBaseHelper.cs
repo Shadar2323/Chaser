@@ -85,7 +85,7 @@ namespace Chaser
         {
             if (!database.Table<Player>().Any(x => x.UserName == userName))
             {
-                var player = new Player { UserName = userName, Password = password };
+                var player = new Player { UserName = userName, Password = password, Record = 0 };
                 database.Insert(player);
                 return true;
             }
@@ -103,6 +103,11 @@ namespace Chaser
                 player.Record = newRecord;
                 database.Update(player);
             }
+        }
+        public Player GetCurrentPlayer(string userName)
+        {
+            Player player = database.Table<Player>().Where(player => player.UserName == userName).FirstOrDefault();
+            return player;
         }
     }
 }

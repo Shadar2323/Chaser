@@ -20,30 +20,42 @@ namespace Chaser
     [Activity(Label = "FastQuizActivity")]
     public class FastQuizActivity : Activity
     {
-        private bool isRunning = true;
-        private int secondsRemaining = 120; // Initial countdown time in seconds
+        private int secondsRemaining = 10; // Initial countdown time in seconds
         private TextView tvCountdown;
         private ProgressBar timeProgressBar;
-        private int totalTimeInSeconds = 120;
-        private ValueAnimator progressAnimator;
         private QuizHandler quizHandler;
         private AnswerButton[] answerButtons;
         private QAndA qAndA;
         private TextView questionText;
+        private TextView answeredCorrectlyText;
+        private ImageButton openDialogBtn;
+        private SessionManager sessionManager;
+        private string userName;
         private int questionNum = 1;
+        private int answeredCorrectly = 0;
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.quizLayout);
-            quizHandler = new QuizHandler();
+            sessionManager = new SessionManager(GetSharedPreferences("LoginPrefs", FileCreationMode.Private));
+            userName = sessionManager.GetSavedUsername();
+            quizHandler = new QuizHandler(userName);
             timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
             tvCountdown = FindViewById<TextView>(Resource.Id.timerTextView);
+            
 
             // Create a new thread and start it
             Thread thread = new Thread(new ThreadStart(CountdownThread));
             thread.Start();
             AnimateProgressBar();
             questionText = FindViewById<TextView>(Resource.Id.questionTextView);
+            answeredCorrectlyText = FindViewById<TextView>(Resource.Id.answeredCorrectlyTextView);
+
+            openDialogBtn = FindViewById<ImageButton>(Resource.Id.openDialog);
+            openDialogBtn.Click += (sender, e) =>
+            {
+                ShowCustomDialog();
+            };
 
             answerButtons = new AnswerButton[4];
             //מייצר את המערך של הכפתורים
@@ -54,6 +66,7 @@ namespace Chaser
         {
             qAndA = quizHandler.GetRandomQuestion();
             questionText.Text =questionNum+". "+ qAndA.question;
+            answeredCorrectlyText.Text = "Answered Correctly: "+answeredCorrectly;
 
             for (int i = 0; i < 4; i++)
             {
@@ -61,6 +74,45 @@ namespace Chaser
                 answerButtons[i].Text = answer.answerText;
                 answerButtons[i].IsTrue = answer.isTrue;
             }
+        }
+        private void ShowCustomDialog()
+        {
+            // Inflate the custom layout
+            View dialogView = LayoutInflater.Inflate(Resource.Layout.dialog_return, null);
+
+            // Create the AlertDialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.SetView(dialogView);
+            builder.SetCancelable(false);
+
+            // Get references to dialog components
+            TextView dialogMessage = dialogView.FindViewById<TextView>(Resource.Id.dialogMessage);
+            Button btnReturnHome = dialogView.FindViewById<Button>(Resource.Id.btnReturnHome);
+            Button btnReturnToGame = dialogView.FindViewById<Button>(Resource.Id.btnReturnToGame);
+
+            // Set the message
+            dialogMessage.Text = "Do you want to:";
+
+            // Set click event for Return to Home button
+            btnReturnHome.Click += (sender, e) =>
+            {
+                // Handle Return to Home button click
+                // You can navigate to the home screen or perform any action here
+                Intent mainActivityIntent = new Intent(this, typeof(HomeScreenActivity));
+                StartActivity(mainActivityIntent);
+            };
+
+            // Set click event for Return to Game button
+            btnReturnToGame.Click += (sender, e) =>
+            {
+                // Handle Return to Game button click
+                // You can perform any action related to returning to the game here
+                Intent chaserGameIntent = new Intent(this, typeof(ChaserGameActivity));
+                StartActivity(chaserGameIntent);
+            };
+
+            // Show the dialog
+            builder.Show();
         }
         private void InitializeAnswerButtons()
         {
@@ -91,6 +143,7 @@ namespace Chaser
             // Check if the clicked answer is correct
             if (clickedButton.IsTrue)
             {
+                answeredCorrectly++;
                 // Display a toast for correct answer
                 Toast.MakeText(this, "Correct!", ToastLength.Short).Show();
             }
@@ -122,14 +175,14 @@ namespace Chaser
                     RunOnUiThread(() => UpdateCountdown(secondsRemaining));
                 }
             }
-
-            // Countdown finished, handle completion here
+            RunOnUiThread(EndOfGame);
+            // הטיימר נגמר - כמה שאלות ענית נכון, להציג את השיא ובחירה עוד משחק או חזרה למסך בית
         }
 
         private void AnimateProgressBar()
         {
             ValueAnimator animation = ValueAnimator.OfInt(timeProgressBar.Progress, 0);
-            animation.SetDuration(120000); // Animation duration in milliseconds (2 minutes)
+            animation.SetDuration(secondsRemaining*1000); // Animation duration in milliseconds (2 minutes)
             animation.SetInterpolator(new Android.Views.Animations.LinearInterpolator()); // Use a linear interpolator for a constant speed
 
             animation.Update += (sender, e) =>
@@ -164,6 +217,41 @@ namespace Chaser
                 case 3: return Android.Graphics.Color.ParseColor("#FFD54F"); // A shade of yellow
                 default: return Android.Graphics.Color.Gray;
             }
+        }
+        private void EndOfGame()
+        {
+            // Inflate the custom layout for the dialog
+            var dialogView = LayoutInflater.Inflate(Resource.Layout.quiz_ending_dialog, null);
+
+            // Find TextViews by their IDs
+            var titleTextView = dialogView.FindViewById<TextView>(Resource.Id.title_text_view);
+            var scoreTextView = dialogView.FindViewById<TextView>(Resource.Id.score_text_view);
+            var newRecordTextView = dialogView.FindViewById<TextView>(Resource.Id.new_record_text_view);
+
+            // Update the text properties of TextViews
+            titleTextView.Text = "Great Job!";
+            scoreTextView.Text = "4/5";
+            newRecordTextView.Text = "New Record!";
+            if (quizHandler.IsRecordHigher(answeredCorrectly))
+            {
+                newRecordTextView.Text = "New Record! \n " + answeredCorrectly;
+                newRecordTextView.Visibility = ViewStates.Visible; // Make new record text visible
+            }
+            else
+            {
+                newRecordTextView.Text = "current record: "+ quizHandler.currentRecord;
+                newRecordTextView.Visibility = ViewStates.Visible; // Make new record text visible
+            }
+
+            // Create the AlertDialog builder
+            var builder = new AlertDialog.Builder(this);
+            builder.SetView(dialogView);
+
+            // Create the AlertDialog object
+            var dialog = builder.Create();
+
+            // Show the dialog
+            dialog.Show();
         }
     }
 }

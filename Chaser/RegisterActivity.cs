@@ -48,8 +48,8 @@ namespace Chaser
             if (success)
             {
                 Toast.MakeText(this, "Registration successful", ToastLength.Short).Show();
-                Intent homeScreenIntent = new Intent(this, typeof(HomeScreenActivity));
-                StartActivity(homeScreenIntent);
+                Intent mainActivityIntent = new Intent(this, typeof(MainActivity));
+                StartActivity(mainActivityIntent);
             }
             else
             {
