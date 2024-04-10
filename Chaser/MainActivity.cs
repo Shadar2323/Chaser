@@ -71,19 +71,14 @@ namespace Chaser
             bool isAuthenticated = databaseHelper.AuthenticateUser(username, password);
             if (isAuthenticated)
             {
+                _sessionManager.SaveUsername(username);
                 if (rememberUsernameCheckbox.Checked)
                 {
-                    // Save username preference if checkbox is checked
-                    _sessionManager.SaveUsername(username);
-
                     // Save session state only if checkbox is checked
                     _sessionManager.SaveLoggedInState(true);
                 }
                 else
                 {
-                    // Clear saved username if checkbox is not checked
-                    _sessionManager.ClearSavedUsername();
-
                     // Clear session state if checkbox is not checked
                     _sessionManager.SaveLoggedInState(false);
                 }

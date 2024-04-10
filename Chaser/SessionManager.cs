@@ -50,7 +50,8 @@ namespace Chaser
         public void ClearSession()
         {
             var editor = _prefs.Edit();
-            editor.Clear();
+            editor.Remove(UsernameKey);
+            editor.Remove(SessionKey);
             editor.Apply();
         }
         public void ClearSavedUsername()
