@@ -72,7 +72,8 @@
                 android:layout_column="7"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/chesticon"/>
+                android:src="@drawable/chesticon"
+                android:id="@+id/chestIcon"/>
     </GridLayout>
 
     <TextView

@@ -9,6 +9,8 @@ using System.Timers;
 using Android.Util;
 using System.Drawing;
 using Android.Graphics;
+using System.Threading.Tasks;
+using Android.Views.Animations;
 
 namespace Chaser
 {
@@ -21,6 +23,7 @@ namespace Chaser
 
         private ImageView chaserLogo;
         private ImageView playerLogo;
+        private ImageView chestLogo;
         QAndA qAndA;
 
         ImageButton btnShowDialog;
@@ -54,6 +57,7 @@ namespace Chaser
             countDownTimer.Elapsed += OnTimedEvent;
             countDownTimer.Start();
 
+            chestLogo = FindViewById<ImageView>(Resource.Id.chestIcon);
             chaserLogo = FindViewById<ImageView>(Resource.Id.chaserLogo1);
             playerLogo = FindViewById<ImageView>(Resource.Id.playerLogo1);
             SetPlayerLogo();
@@ -313,11 +317,18 @@ namespace Chaser
 
         }
 
-        private void EndOfGame(bool playerWon)
+        private async void EndOfGame(bool playerWon)
         {
             countDownTimer.Stop();
             gameHandler.RestartGame();
+            await VictoryAnimnation();
             ShowVictoryDialog(playerWon);
+        }
+        private async Task VictoryAnimnation()
+        {
+            Animation animScale = AnimationUtils.LoadAnimation(this, Resource.Animation.victory_anim);
+            chestLogo.StartAnimation(animScale);
+            await Task.Delay(3000);
         }
     }
 }

@@ -33,6 +33,7 @@ namespace Chaser
         private string userName;
         private int questionNum = 1;
         private int answeredCorrectly = 0;
+        
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -61,6 +62,7 @@ namespace Chaser
             //מייצר את המערך של הכפתורים
             InitializeAnswerButtons();
             UpdateScreen();
+            StartMusic();
         }
         public void UpdateScreen()
         {
@@ -107,8 +109,8 @@ namespace Chaser
             {
                 // Handle Return to Game button click
                 // You can perform any action related to returning to the game here
-                Intent chaserGameIntent = new Intent(this, typeof(ChaserGameActivity));
-                StartActivity(chaserGameIntent);
+                Intent fastQuizIntent = new Intent(this, typeof(FastQuizActivity));
+                StartActivity(fastQuizIntent);
             };
 
             // Show the dialog
@@ -159,7 +161,6 @@ namespace Chaser
             // Update the screen for the next question
             UpdateScreen();
         }
-
         private void CountdownThread()
         {
             while (secondsRemaining > 0)
@@ -178,7 +179,6 @@ namespace Chaser
             RunOnUiThread(EndOfGame);
             // הטיימר נגמר - כמה שאלות ענית נכון, להציג את השיא ובחירה עוד משחק או חזרה למסך בית
         }
-
         private void AnimateProgressBar()
         {
             ValueAnimator animation = ValueAnimator.OfInt(timeProgressBar.Progress, 0);
@@ -220,6 +220,19 @@ namespace Chaser
         }
         private void EndOfGame()
         {
+            ShowVictoryDialog();
+            StopMusic();
+        }
+        public void StartMusic()
+        {
+            StartService(new Intent(this, typeof(MusicService)));
+        }
+        public void StopMusic()
+        {
+            StopService(new Intent(this, typeof(MusicService)));
+        }
+        public void ShowVictoryDialog()
+        {
             // Inflate the custom layout for the dialog
             var dialogView = LayoutInflater.Inflate(Resource.Layout.quiz_ending_dialog, null);
 
@@ -227,10 +240,12 @@ namespace Chaser
             var titleTextView = dialogView.FindViewById<TextView>(Resource.Id.title_text_view);
             var scoreTextView = dialogView.FindViewById<TextView>(Resource.Id.score_text_view);
             var newRecordTextView = dialogView.FindViewById<TextView>(Resource.Id.new_record_text_view);
+            Button btnReturnHome = dialogView.FindViewById<Button>(Resource.Id.continue_button);
+            Button btnReturnToGame = dialogView.FindViewById<Button>(Resource.Id.retry_button);
 
             // Update the text properties of TextViews
             titleTextView.Text = "Great Job!";
-            scoreTextView.Text = "4/5";
+            scoreTextView.Text = answeredCorrectly + "/" + questionNum;
             newRecordTextView.Text = "New Record!";
             if (quizHandler.IsRecordHigher(answeredCorrectly))
             {
@@ -239,9 +254,26 @@ namespace Chaser
             }
             else
             {
-                newRecordTextView.Text = "current record: "+ quizHandler.currentRecord;
+                newRecordTextView.Text = "current record: " + quizHandler.currentRecord;
                 newRecordTextView.Visibility = ViewStates.Visible; // Make new record text visible
             }
+            // Set click event for Return to Home button
+            btnReturnHome.Click += (sender, e) =>
+            {
+                // Handle Return to Home button click
+                // You can navigate to the home screen or perform any action here
+                Intent mainActivityIntent = new Intent(this, typeof(HomeScreenActivity));
+                StartActivity(mainActivityIntent);
+            };
+
+            // Set click event for Return to Game button
+            btnReturnToGame.Click += (sender, e) =>
+            {
+                // Handle Return to Game button click
+                // You can perform any action related to returning to the game here
+                Intent fastQuizIntent = new Intent(this, typeof(FastQuizActivity));
+                StartActivity(fastQuizIntent);
+            };
 
             // Create the AlertDialog builder
             var builder = new AlertDialog.Builder(this);

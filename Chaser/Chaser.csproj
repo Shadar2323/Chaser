@@ -69,6 +69,7 @@
     <Compile Include="GameHandler.cs" />
     <Compile Include="HomeScreenActivity.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="MusicService.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="QAndA.cs" />
     <Compile Include="QuizHandler.cs" />
@@ -218,6 +219,13 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\button_background.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\Raw\AngryBirdsTheme.mp3" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <AndroidResource Include="Resources\anim\victory_anim.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
