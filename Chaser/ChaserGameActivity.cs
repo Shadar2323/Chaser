@@ -26,6 +26,7 @@ namespace Chaser
         private ImageView chaserLogo;
         private ImageView playerLogo;
         private ImageView chestLogo;
+        private ImageView playerProfileImage;
         QAndA qAndA;
 
         ImageButton btnShowDialog;
@@ -36,6 +37,7 @@ namespace Chaser
 
         AnswerButton[] answersButtons;
 
+        private string playerProfileImagePath;
         private SessionManager sessionManager;
         protected DatabaseHelper databaseHelper;
         private string userName;
@@ -77,25 +79,15 @@ namespace Chaser
             userName = sessionManager.GetSavedUsername();
             currentPlayer = databaseHelper.GetCurrentPlayer(userName); // Retrieve the current player from your database or session
 
-            playerName.Text = userName;
-            string playerProfileImagePath = currentPlayer.ProfileImage; // Get the profile image URI of the player
+            SetPlayerDetails();
+           
 
 
             chestLogo = FindViewById<ImageView>(Resource.Id.chestIcon);
             chaserLogo = FindViewById<ImageView>(Resource.Id.chaserLogo1);
-            playerLogo = FindViewById<ImageView>(Resource.Id.playerLogo1);
-
-            if (!string.IsNullOrEmpty(playerProfileImagePath))
-            {
-                Android.Graphics.Bitmap profileBitmap = BitmapFactory.DecodeFile(playerProfileImagePath);
-                playerLogo.SetImageBitmap(profileBitmap);
-                profileBitmap.Dispose();
-            }
-            else
-            {
-                playerLogo.SetImageResource(Resource.Drawable.player);
-            }
+            playerLogo = FindViewById<ImageView>(Resource.Id.playerLogo1);            
             SetPlayerLogo();
+
             btnShowDialog = FindViewById<ImageButton>(Resource.Id.openDialog);
 
             // Set click event for the button
@@ -133,7 +125,27 @@ namespace Chaser
             playerLogo.LayoutParameters = layoutParams;
 
         }
-
+        private void SetPlayerDetails()
+        {
+            playerName.Text = userName;
+            playerProfileImagePath = currentPlayer.ProfileImage; // Get the profile image URI of the player
+            playerProfileImage = FindViewById<ImageView>(Resource.Id.playerPic);
+            LoadProfileImage();
+        }
+        private void LoadProfileImage()
+        {
+            if (!string.IsNullOrEmpty(playerProfileImagePath))
+            {
+                Android.Graphics.Bitmap profileBitmap = BitmapFactory.DecodeFile(playerProfileImagePath);
+                playerProfileImage.SetImageBitmap(profileBitmap);
+                profileBitmap.Dispose();
+            }
+            else
+            {
+                playerProfileImage.SetImageResource(Resource.Drawable.player);                
+            }
+            playerProfileImage.SetBackgroundColor(Android.Graphics.Color.Transparent);
+        }
         private void ShowCustomDialog()
         {
             // Pause the game

@@ -234,6 +234,7 @@ namespace Chaser
             else
             {
                 profileImage.SetImageResource(Resource.Drawable.player);
+                profileImage.SetBackgroundColor(Color.Transparent);
             }
         }
         private void RequestWriteExternalStoragePermission()

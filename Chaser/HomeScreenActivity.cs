@@ -39,8 +39,8 @@ namespace Chaser
             chaserButton.Click += OpenGameSettingsClick;
             settings = FindViewById<ImageButton>(Resource.Id.settingsOpener);
             settings.Click += OpenSettingsClick;
-            //profile = FindViewById<ImageButton>(Resource.Id.imageButton);
-            //profile.Click += ImageButton_Click;
+            profile = FindViewById<ImageButton>(Resource.Id.playerStatsButton);
+            profile.Click += OpenStatsClick;
             _sessionManager = new SessionManager(GetSharedPreferences("LoginPrefs", FileCreationMode.Private));
 
             //DrawerLayout drawerLayout = FindViewById<DrawerLayout>(Resource.Id.drawer_layout);
@@ -60,7 +60,12 @@ namespace Chaser
             Finish();
 
         }
-
+        private void OpenStatsClick(object sender, EventArgs e)
+        {
+            Intent settingsIntent = new Intent(this, typeof(PlayerStatsActivity));
+            StartActivity(settingsIntent);
+            Finish();
+        }
         private void OpenSettingsClick(object sender, EventArgs e)
         {
             Intent settingsIntent = new Intent(this, typeof(ProfileSettingsActivity));

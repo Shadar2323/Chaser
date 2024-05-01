@@ -22,7 +22,7 @@ namespace Chaser
     [Activity(Label = "FastQuizActivity")]
     public class FastQuizActivity : Activity
     {
-        private int secondsRemaining = 10; // Initial countdown time in seconds
+        private int secondsRemaining = 60; // Initial countdown time in seconds
         private TextView tvCountdown;
         private ProgressBar timeProgressBar;
         private QuizHandler quizHandler;
