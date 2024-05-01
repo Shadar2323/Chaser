@@ -9,17 +9,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using SQLite;
+using AndroidX.ProfileInstallers;
 
 namespace Chaser
 {
     [Table("Players")]
-    public class Player
+    public class Player //מחלקה המתארת את השחקן:
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public int Record { get; set; }
+        public string UserName { get; set; } //שם משתמש
+        public string Password { get; set; }// סיסמה
+        public int Record { get; set; }//שיא תשובות נכונות בחידון מהיר
+        public string ProfileImage {get;set;}//שירשור המתאר את המסלול למיקום של התמונת פרופיל של השחקן
+        // Default profile image path
 
         // Parameterless constructor
         public Player()
@@ -32,6 +35,7 @@ namespace Chaser
             UserName = userName;
             Password = password;
             Record = 0;
+            ProfileImage = null; 
         }
     }
 }

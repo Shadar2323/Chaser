@@ -6,6 +6,8 @@ using AndroidX.AppCompat.App;
 using Android.Content;
 using System;
 using System.IO;
+using Android.Content.PM;
+
 namespace Chaser
 {
     [Activity(Label = "@string/app_name", Theme = "@style/AppTheme", MainLauncher = true)]
@@ -23,6 +25,9 @@ namespace Chaser
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.logIn);
+
+            // Lock screen orientation to portrait
+            RequestedOrientation = ScreenOrientation.Portrait;
 
             string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
             databaseHelper = new DatabaseHelper(dbPath);

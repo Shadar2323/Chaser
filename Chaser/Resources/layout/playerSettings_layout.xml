@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/appbg2"
+    android:layoutDirection="ltr"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="30dp">
+        <!-- Profile Image -->
+        <ImageView
+            android:id="@+id/profileImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"        
+            android:src="@drawable/player"
+            android:scaleType="centerCrop"
+            android:background="@android:color/transparent"
+            />
+
+        <!-- User Name -->
+        <EditText
+            android:id="@+id/usernameEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="24sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:inputType="text"
+            android:enabled="false"
+            android:layout_below="@id/profileImage"
+            android:layout_marginTop="8dp"
+            android:textStyle="bold"/>
+        <ImageButton
+            android:id="@+id/changeName"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/pencil"
+            android:scaleType="centerCrop"
+            android:layout_toEndOf="@id/usernameEditText"
+            android:layout_below="@id/profileImage"
+            android:layout_marginTop="14dp"
+            android:layout_marginLeft="10dp"
+            android:background="@android:color/transparent"
+            />
+    </RelativeLayout>
+    
+
+    <!-- Edit Profile Button -->
+    <Button
+        android:id="@+id/imageEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:text="Edit Image"
+        android:textStyle="bold"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/button_background"/>
+    <TextView
+        android:id="@+id/logOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Out"
+        android:textColor="@color/browser_actions_title_color"
+        android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:textSize="20sp"/>
+    <ImageButton
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/returnhomeupd"
+        android:id="@+id/returnHome"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="8dp"
+        />
+</RelativeLayout>

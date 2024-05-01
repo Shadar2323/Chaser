@@ -13,12 +13,12 @@ using Android.Icu.Text;
 
 namespace Chaser
 {
-    public class TriviaHandler
+    public class TriviaHandler //מחלקת הבסיס של כל המשחקים
     {
-        protected DatabaseHelper databaseHelper;
-        protected List<QAndA> questionList;
-        protected List<QAndA> usedQuestions;
-        protected Random random;        
+        protected DatabaseHelper databaseHelper;//יוצר חיבור למבנה נתונים
+        protected List<QAndA> questionList;//השאלות שישתמשו בהן במשחק
+        protected List<QAndA> usedQuestions;//השאלות שכבר השתמשו (ששאלה לא תוצג פעמיים
+        protected Random random; //בוחר שאלה רנדומלית      
 
         public TriviaHandler()
         {
@@ -33,11 +33,11 @@ namespace Chaser
         }
         public QAndA GetRandomQuestion()
         {
-            // Check if all questions have been used, if so, reset the used questions list
+            // בודק אם כל השאלות שומשו - לא אמור לקרות
             if (usedQuestions.Count == questionList.Count)
             {
                 usedQuestions.Clear();
-                //צריך להוריד
+                //אם במקרה קורה שהשחקן סיים את כל השאלות חוזר משתנה מיוחד עם טקסט ייחודי ותוכנית באקטיביטי תטפל בזה
                 QAndA qAndA1 = new QAndA("Out of questions", new Answer("Red", false), new Answer("Blue", true), new Answer("Green", false), new Answer("Yellow", false), "easy");
                 return qAndA1;
             }

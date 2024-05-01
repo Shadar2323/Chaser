@@ -11,6 +11,7 @@ using System.Drawing;
 using Android.Graphics;
 using System.Threading.Tasks;
 using Android.Views.Animations;
+using Android.Content.PM;
 
 namespace Chaser
 {
@@ -18,6 +19,7 @@ namespace Chaser
     public class ChaserGameActivity : Activity
     {
         private TextView tvCountdown;
+        private TextView playerName;
         private Timer countDownTimer;
         private int secondsRemaining;
 
@@ -32,12 +34,24 @@ namespace Chaser
 
         TextView question;
 
-        AnswerButton[] answersButtons;        
+        AnswerButton[] answersButtons;
+
+        private SessionManager sessionManager;
+        protected DatabaseHelper databaseHelper;
+        private string userName;
+        Player currentPlayer;
+        private AlertDialog dialog; // Declare a field to store the AlertDialog instance
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.chaser);
             gameHandler = new GameHandler();
+            sessionManager = new SessionManager(GetSharedPreferences("LoginPrefs", FileCreationMode.Private));
+            string dbPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
+            databaseHelper = new DatabaseHelper(dbPath);
+
+            // Lock screen orientation to landscape
+            RequestedOrientation = ScreenOrientation.Landscape;
 
             qAndA = gameHandler.GetRandomQuestion();
             question = FindViewById<TextView>(Resource.Id.question);
@@ -52,14 +66,35 @@ namespace Chaser
 
             // Create and start the countdown timer
             secondsRemaining = gameHandler.GetDuration();
-            countDownTimer = new Timer();
-            countDownTimer.Interval = 1000; // 1 second interval
+            countDownTimer = new Timer
+            {
+                Interval = 1000 // 1 second interval
+            };
             countDownTimer.Elapsed += OnTimedEvent;
             countDownTimer.Start();
+
+            playerName = FindViewById<TextView>(Resource.Id.playerName);
+            userName = sessionManager.GetSavedUsername();
+            currentPlayer = databaseHelper.GetCurrentPlayer(userName); // Retrieve the current player from your database or session
+
+            playerName.Text = userName;
+            string playerProfileImagePath = currentPlayer.ProfileImage; // Get the profile image URI of the player
+
 
             chestLogo = FindViewById<ImageView>(Resource.Id.chestIcon);
             chaserLogo = FindViewById<ImageView>(Resource.Id.chaserLogo1);
             playerLogo = FindViewById<ImageView>(Resource.Id.playerLogo1);
+
+            if (!string.IsNullOrEmpty(playerProfileImagePath))
+            {
+                Android.Graphics.Bitmap profileBitmap = BitmapFactory.DecodeFile(playerProfileImagePath);
+                playerLogo.SetImageBitmap(profileBitmap);
+                profileBitmap.Dispose();
+            }
+            else
+            {
+                playerLogo.SetImageResource(Resource.Drawable.player);
+            }
             SetPlayerLogo();
             btnShowDialog = FindViewById<ImageButton>(Resource.Id.openDialog);
 
@@ -101,6 +136,9 @@ namespace Chaser
 
         private void ShowCustomDialog()
         {
+            // Pause the game
+            PauseGame();
+
             // Inflate the custom layout
             View dialogView = LayoutInflater.Inflate(Resource.Layout.dialog_return, null);
 
@@ -124,19 +162,21 @@ namespace Chaser
                 // You can navigate to the home screen or perform any action here
                 Intent mainActivityIntent = new Intent(this, typeof(HomeScreenActivity));
                 StartActivity(mainActivityIntent);
+                Finish();
             };
 
             // Set click event for Return to Game button
             btnReturnToGame.Click += (sender, e) =>
             {
-                // Handle Return to Game button click
-                // You can perform any action related to returning to the game here
-                Intent chaserGameIntent = new Intent(this, typeof(ChaserGameActivity));
-                StartActivity(chaserGameIntent);
+                // Dismiss the dialog
+                dialog.Dismiss();
+
+                // Resume the game
+                ResumeGame();
             };
 
             // Show the dialog
-            builder.Show();
+            dialog = builder.Show();
         }
 
         private void MoveAnimation(ImageView logo)
@@ -204,7 +244,8 @@ namespace Chaser
                     // The clicked button is marked as true
                     Toast.MakeText(this, "Correct!", ToastLength.Short).Show();
                     MoveAnimation(playerLogo);
-                    switch (gameHandler.answeredCorrectly())
+                    int future = gameHandler.answeredCorrectly();
+                    switch (future)
                     {
                         case 1:
                             MoveAnimation(chaserLogo);
@@ -317,12 +358,25 @@ namespace Chaser
 
         }
 
-        private async void EndOfGame(bool playerWon)
+        private void EndOfGame(bool playerWon)
         {
             countDownTimer.Stop();
             gameHandler.RestartGame();
-            await VictoryAnimnation();
+            //await VictoryAnimnation();
             ShowVictoryDialog(playerWon);
+        }
+        private void PauseGame()
+        {
+            // Pause any game-related activities
+            countDownTimer.Stop();
+            // You can add more pause logic here if needed
+        }
+
+        private void ResumeGame()
+        {
+            // Resume game-related activities
+            countDownTimer.Start();
+            // You can add more resume logic here if needed
         }
         private async Task VictoryAnimnation()
         {

@@ -5,74 +5,80 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="25px"
-    android:minHeight="25px"
+    android:background="@drawable/appbg"
     >
-    <ImageView
-        android:contentDescription=""
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:src="@drawable/image"
-        android:id="@+id/imageView1"/>
-    <ImageButton
-        android:contentDescription=""
-        android:id="@+id/imageButton"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="10dp"
-        android:src="@drawable/iconP"
-        android:backgroundTint="@android:color/white"
-        android:onClick="showPopupMenu"
+        android:layout_centerInParent="true">
+        <ImageButton
+            android:contentDescription=""
+            android:layout_width="225dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"                   
+            android:src="@drawable/chaserStartButton"
+            android:background="@android:color/transparent"
+            android:id="@+id/chaserButton"
+            android:layout_centerHorizontal="true"
+
         />
-        
+        <ImageButton
+            android:layout_marginTop="32dp"
+            android:contentDescription=""
+            android:layout_width="280dp"
+            android:layout_height="50dp"
+            android:scaleType="centerCrop"           
+            android:id="@+id/fastQuizButton"
+            android:src="@drawable/quizbuttonstart"
+            android:background="@android:color/transparent"
+            android:layout_below="@id/chaserButton"
+            android:layout_centerHorizontal="true"
+        />                        
+        </RelativeLayout>
+    
+
     <LinearLayout
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp">
+        
 
-    <Button
-        android:id="@+id/chaserButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="המרדף"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="@android:color/black"
-        android:onClick="startGameButtonClick"/>
+        <ImageButton
+            android:contentDescription=""
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"           
+            android:src="@drawable/profilebutton"
+            android:background="@android:color/transparent"
+            />
 
-    <View
-        android:layout_width="16dp"
-        android:layout_height="1dp" />
+        <View
+            android:layout_width="16dp"
+            android:layout_height="1dp" />
 
-    <Button
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"     
-        android:text="חידון מהיר"
-        android:textColor="#FFFFFF"
-        android:id="@+id/fastQuizButton"
-        android:backgroundTint="@android:color/black"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_weight="1"/>
 
-    <View
-        android:layout_width="16dp"
-        android:layout_height="1dp" />
+        <View
+            android:layout_width="16dp"
+            android:layout_height="1dp" />
 
-    <Button
-            android:id="@id/registerButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="תרגול שאלות"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="@android:color/black"/>
+        <ImageButton
+            android:contentDescription=""
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"           
+            android:src="@drawable/settingsbutton"
+            android:id="@+id/settingsOpener"
+            android:background="@android:color/transparent"
+            />
     </LinearLayout>
 
 </RelativeLayout>

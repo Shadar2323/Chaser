@@ -68,9 +68,12 @@
     <Compile Include="FastQuizActivity.cs" />
     <Compile Include="GameHandler.cs" />
     <Compile Include="HomeScreenActivity.cs" />
+    <Compile Include="ImageHelper.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="MusicService.cs" />
     <Compile Include="Player.cs" />
+    <Compile Include="PlayerStatsActivity.cs" />
+    <Compile Include="ProfileSettingsActivity.cs" />
     <Compile Include="QAndA.cs" />
     <Compile Include="QuizHandler.cs" />
     <Compile Include="RegisterActivity.cs" />
@@ -131,13 +134,7 @@
     <PackageReference Include="Xamarin.Essentials" Version="1.8.0" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Image.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\player.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\iconP.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\settings.xml">
@@ -175,11 +172,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\victoryDialog.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\fastQuizLayout.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
@@ -223,9 +215,48 @@
   <ItemGroup>
     <AndroidResource Include="Resources\Raw\AngryBirdsTheme.mp3" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <AndroidResource Include="Resources\anim\victory_anim.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\player_stats.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\appBG.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\chaserStartButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\quizButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\quizButtonStart.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\profileButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\settingsButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\playerSettings_layout.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\appBg2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\circular_background.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\returnHomeUpd.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

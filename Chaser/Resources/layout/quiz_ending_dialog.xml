@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@drawable/dialog_background">
+    android:padding="20dp"
+    android:background="#FFD4DB">
 
     <!-- Title: Great Job! -->
     <TextView
@@ -14,7 +14,7 @@
         android:text="Great Job!"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
@@ -24,12 +24,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="You answered 4 questions correctly!"
-        android:textSize="24sp"
-        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textColor="#333333"
         android:layout_marginTop="16dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"/>
-
 
     <TextView
         android:id="@+id/new_record_text_view"
@@ -37,8 +36,9 @@
         android:layout_height="wrap_content"
         android:text="New Record!"
         android:textSize="20sp"
-        android:textColor="@android:color/holo_green_dark"
-        android:visibility="gone" 
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        android:visibility="gone"
         android:layout_marginTop="16dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center"/>
@@ -49,32 +49,35 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="24dp"
-        android:gravity="center">
+        android:gravity="center_horizontal">
 
         <!-- Retry Button -->
-    <Button
-        android:id="@+id/retry_button"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="Retry"
-        android:textSize="20sp" 
-        android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
-        android:padding="12dp" 
-        android:layout_marginEnd="16dp"/> 
+        <Button
+            android:id="@+id/retry_button"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Retry"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_background"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"/>
 
-<!-- Continue Button -->
-    <Button
-        android:id="@+id/continue_button"
-        android:layout_width="130dp"
-        android:layout_height="60dp"
-        android:text="Continue"
-        android:textSize="20sp" 
-        android:textColor="@android:color/white"
-        android:background="@drawable/button_background"
-        android:padding="12dp" 
-        android:layout_marginStart="16dp"/> <!-- Added margin for spacing -->
-
+        <!-- Continue Button -->
+        <Button
+            android:id="@+id/continue_button"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:text="Continue"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:background="@drawable/button_background"
+            android:padding="12dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"/>
 
     </LinearLayout>
 

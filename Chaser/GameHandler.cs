@@ -13,15 +13,15 @@ using System.IO;
 
 namespace Chaser
 {
-    public class GameHandler : TriviaHandler
+    public class GameHandler : TriviaHandler //מחלקה שעוזרת לנהל את משחק המרדף
     {
         // Additional members specific to GameHandler
-        private int moveAnimation;
-        private int playerPlacement;
-        private int chaserPlacement;
-        private int botCorrectnessProbability;
-        private string diff;
-        private Settings settings;
+        private int moveAnimation; //משתנה המעיד כמה הדמות צריכה לזוז באנימציה (משתנה לפי רמת קושי(
+        private int playerPlacement; //מיקום השחקן לניצחון
+        private int chaserPlacement; //מיקום הרודף לניצחון
+        private int botCorrectnessProbability; //סיכויו של הרודף לצדוק - תלוי רמת קושי
+        private string diff; //רמת הקושי במשחק
+        private Settings settings;//ההגדרות שנבחרו
         public GameHandler() : base()
         {
             settings = Settings.Instance;
@@ -29,9 +29,6 @@ namespace Chaser
             chaserPlacement = 7;
             questionList = setQuestionsList();
             
-            // The base class constructor (TriviaHandler constructor) is called using "base()"
-            // No need to reinitialize members already initialized in TriviaHandler
-
             if (diff == "hard")
             {
                 // Additional initialization specific to GameHandler for "hard" difficulty
@@ -67,7 +64,7 @@ namespace Chaser
         {           
             return moveAnimation; 
         }
-        public int answeredCorrectly()
+        public int answeredCorrectly() //השחקן ענה נכון - מה קורה עקב זאת:
         {
             playerPlacement--;
             bool chaserCorrect = chaserResault();
@@ -103,7 +100,7 @@ namespace Chaser
             switch (diff)
             {
                 case "easy":
-                    botCorrectnessProbability = 30; // Adjust as needed
+                    botCorrectnessProbability = 50; // Adjust as needed
                     break;
                 case "medium":
                     botCorrectnessProbability = 20; // Adjust as needed

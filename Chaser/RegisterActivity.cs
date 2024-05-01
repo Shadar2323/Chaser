@@ -9,6 +9,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using Android.Content.PM;
+using Android.Graphics;
+
 namespace Chaser
 {
     [Activity(Label = "RegisterActivity")]
@@ -22,12 +25,20 @@ namespace Chaser
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.register);
-            string dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
+
+            // Lock screen orientation to portrait
+            RequestedOrientation = ScreenOrientation.Portrait;
+
+            string dbPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
             databaseHelper = new DatabaseHelper(dbPath);
 
             usernameEditText = FindViewById<EditText>(Resource.Id.usernameEditText);
             passwordEditText = FindViewById<EditText>(Resource.Id.passwordEditText);
             registerButton = FindViewById<Button>(Resource.Id.registerButton);
+            TextView backToLoginTextView = FindViewById<TextView>(Resource.Id.backToLoginTextView);
+            backToLoginTextView.PaintFlags |= PaintFlags.UnderlineText;
+            backToLoginTextView.Click += BackToLoginTextView_Click;
+
 
             registerButton.Click += RegisterButton_Click;
         }
@@ -55,6 +66,13 @@ namespace Chaser
             {
                 Toast.MakeText(this, "Username already exists", ToastLength.Short).Show();
             }
+        }
+        private void BackToLoginTextView_Click(object sender, EventArgs e)
+        {
+            // Navigate to MainActivity
+            Intent intent = new Intent(this, typeof(MainActivity));
+            StartActivity(intent);
+            Finish();
         }
     }
 }

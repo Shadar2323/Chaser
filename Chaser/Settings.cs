@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Chaser
 {
-    public class Settings
+    public class Settings //מחלקה סינגלטונית שמטרתה לשמור את ההגדרות שנבחרו על ידי השחקן
     {
         // Properties
         public string Diff { get; set; }

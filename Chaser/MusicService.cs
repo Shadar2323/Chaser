@@ -13,33 +13,43 @@ using System.Text;
 namespace Chaser
 {
     [Service]
-    public class MusicService: Service
+    public class MusicService : Service
     {
         private MediaPlayer mediaPlayer;
+
+        // This method is called when another component wants to bind with the service
         public override IBinder OnBind(Intent intent)
         {
-            return null;
+            return null; // Return null because this service does not support binding
         }
 
+        // This method is called when the service is started
         public override StartCommandResult OnStartCommand(Intent intent, StartCommandFlags flags, int startId)
         {
-            // Initialize the MediaPlayer
+            // Initialize the MediaPlayer with the background music file
             mediaPlayer = MediaPlayer.Create(this, Resource.Raw.AngryBirdsTheme);
-            mediaPlayer.Looping = true; // Set looping to true for continuous playback
-            mediaPlayer.Start(); // Start playing the background music
+
+            // Set looping to true for continuous playback
+            mediaPlayer.Looping = true;
+
+            // Start playing the background music
+            mediaPlayer.Start();
+
+            // Indicate that this service should continue running until explicitly stopped
             return StartCommandResult.Sticky;
         }
 
+        // This method is called when the service is destroyed
         public override void OnDestroy()
         {
-            // Release the MediaPlayer when the service is destroyed
+            // Release the MediaPlayer resources when the service is destroyed
             if (mediaPlayer != null)
             {
-                mediaPlayer.Stop();
-                mediaPlayer.Release();
-                mediaPlayer = null;
+                mediaPlayer.Stop(); // Stop playback
+                mediaPlayer.Release(); // Release resources
+                mediaPlayer = null; // Set the reference to null
             }
-            base.OnDestroy();
+            base.OnDestroy(); // Call the base class method
         }
     }
 }

@@ -15,16 +15,16 @@ using System.IO;
 namespace Chaser
 {
     [Table ("QAndA")]
-    public class QAndA
+    public class QAndA //מחלקה שמתארת שאלה והתשובות שלה
     {
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
-        public string question { get; set;}       
-        public string diff { get; set; }
+        public string question { get; set;} //השאלה עצמה      
+        public string diff { get; set; }// רמת הקושי
         // SQLite-Net-PCL compatible property
         [Ignore] // Ignore the answers during SQLite operations
-        public Answer[] answers { get; set; }
-        public string SerializedAnswers
+        public Answer[] answers { get; set; } //התשובות: במבנה נתונים נשמרות כשירשור ולכן בעת הכנסת העצם למבנה הנתונים התוכנה מתבקשת להתעלם מהעצם הזה
+        public string SerializedAnswers //התשובות כשירשור סטרילי
         {
             get => JsonConvert.SerializeObject(answers);
             set => answers = JsonConvert.DeserializeObject<Answer[]>(value);

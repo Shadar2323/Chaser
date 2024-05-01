@@ -1,6 +1,7 @@
 ﻿using Android.Animation;
 using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.Graphics;
 using Android.OS;
 using Android.Runtime;
@@ -8,6 +9,7 @@ using Android.Util;
 using Android.Views;
 using Android.Widget;
 using Java.Util.Logging;
+using Org.Apache.Commons.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +35,10 @@ namespace Chaser
         private string userName;
         private int questionNum = 1;
         private int answeredCorrectly = 0;
-        
+        private bool isDialogShown = false; // Flag to track whether the dialog is currently shown
+        private AlertDialog dialog;
+        private ValueAnimator progressBarAnimation; // Declare a class-level variable to store the progress bar animation
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -43,7 +48,9 @@ namespace Chaser
             quizHandler = new QuizHandler(userName);
             timeProgressBar = FindViewById<ProgressBar>(Resource.Id.timeProgressBar);
             tvCountdown = FindViewById<TextView>(Resource.Id.timerTextView);
-            
+
+            // Lock screen orientation to portrait
+            RequestedOrientation = ScreenOrientation.Portrait;
 
             // Create a new thread and start it
             Thread thread = new Thread(new ThreadStart(CountdownThread));
@@ -67,8 +74,8 @@ namespace Chaser
         public void UpdateScreen()
         {
             qAndA = quizHandler.GetRandomQuestion();
-            questionText.Text =questionNum+". "+ qAndA.question;
-            answeredCorrectlyText.Text = "Answered Correctly: "+answeredCorrectly;
+            questionText.Text = qAndA.question;
+            answeredCorrectlyText.Text = "Question "+questionNum;
 
             for (int i = 0; i < 4; i++)
             {
@@ -79,13 +86,21 @@ namespace Chaser
         }
         private void ShowCustomDialog()
         {
+            // Pause the countdown thread
+            isDialogShown = true;
+
+            // Stop the progress bar animation
+            StopProgressBarAnimation();
+
             // Inflate the custom layout
             View dialogView = LayoutInflater.Inflate(Resource.Layout.dialog_return, null);
 
-            // Create the AlertDialog
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            // Create the AlertDialog builder
+            var builder = new AlertDialog.Builder(this);
             builder.SetView(dialogView);
-            builder.SetCancelable(false);
+
+            // Create the AlertDialog object
+            dialog = builder.Create();
 
             // Get references to dialog components
             TextView dialogMessage = dialogView.FindViewById<TextView>(Resource.Id.dialogMessage);
@@ -107,14 +122,27 @@ namespace Chaser
             // Set click event for Return to Game button
             btnReturnToGame.Click += (sender, e) =>
             {
-                // Handle Return to Game button click
-                // You can perform any action related to returning to the game here
-                Intent fastQuizIntent = new Intent(this, typeof(FastQuizActivity));
-                StartActivity(fastQuizIntent);
+                // Dismiss the dialog
+                dialog.Dismiss();
+
+                // Resume the countdown thread
+                isDialogShown = false;
+
+                // Restart the progress bar animation
+                AnimateProgressBar();
             };
 
             // Show the dialog
-            builder.Show();
+            dialog.Show();
+        }
+        private void StopProgressBarAnimation()
+        {
+            // Cancel the progress bar animation
+            if (progressBarAnimation != null)
+            {
+                progressBarAnimation.Cancel();
+                progressBarAnimation = null;
+            }
         }
         private void InitializeAnswerButtons()
         {
@@ -167,13 +195,17 @@ namespace Chaser
             {
                 Thread.Sleep(1000); // Sleep for 1 second
 
-                // Decrease the countdown timer
-                secondsRemaining--;
-
-                if (secondsRemaining >= 0)
+                // Check if the dialog is shown
+                if (!isDialogShown)
                 {
-                    // Update the countdown UI on the main thread
-                    RunOnUiThread(() => UpdateCountdown(secondsRemaining));
+                    // Decrease the countdown timer
+                    secondsRemaining--;
+
+                    if (secondsRemaining >= 0)
+                    {
+                        // Update the countdown UI on the main thread
+                        RunOnUiThread(() => UpdateCountdown(secondsRemaining));
+                    }
                 }
             }
             RunOnUiThread(EndOfGame);
@@ -181,23 +213,25 @@ namespace Chaser
         }
         private void AnimateProgressBar()
         {
-            ValueAnimator animation = ValueAnimator.OfInt(timeProgressBar.Progress, 0);
-            animation.SetDuration(secondsRemaining*1000); // Animation duration in milliseconds (2 minutes)
-            animation.SetInterpolator(new Android.Views.Animations.LinearInterpolator()); // Use a linear interpolator for a constant speed
+            // Stop any existing animation
+            StopProgressBarAnimation();
 
-            animation.Update += (sender, e) =>
+            progressBarAnimation = ValueAnimator.OfInt(timeProgressBar.Progress, 0);
+            progressBarAnimation.SetDuration(secondsRemaining * 1000);
+            progressBarAnimation.SetInterpolator(new Android.Views.Animations.LinearInterpolator());
+
+            progressBarAnimation.Update += (sender, e) =>
             {
-                int value = (int)animation.AnimatedValue;
-                Android.OS.Handler handler = new Android.OS.Handler(Looper.MainLooper);
-                handler.Post(() => timeProgressBar.Progress = value);
+                int value = (int)progressBarAnimation.AnimatedValue;
+                timeProgressBar.Progress = value;
             };
 
-            animation.AnimationEnd += (sender, e) =>
+            progressBarAnimation.AnimationEnd += (sender, e) =>
             {
                 // Animation has ended, you can perform any additional actions here
             };
 
-            animation.Start();
+            progressBarAnimation.Start();
         }
         private void UpdateCountdown(int seconds)
         {

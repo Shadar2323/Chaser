@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.PM;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
@@ -20,6 +21,8 @@ namespace Chaser
         Settings settings = Settings.Instance;
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            // Lock screen orientation to landscape
+            RequestedOrientation = ScreenOrientation.Landscape;
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.settings);
             // Create your application here

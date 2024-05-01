@@ -9,7 +9,7 @@ using System;
 namespace Chaser
 {
     [Register("com.companyname.chaser.AnswerButton")]
-    public class AnswerButton : Button
+    public class AnswerButton : Button //מחלקה היורשת מהכפתור הבסיסי ומוסיפה לו תכונה של נכון או לא נכון, ומה קורה כשלוחצים עליו
     {
         public bool IsTrue { get; set; }
         public event EventHandler ButtonClick;

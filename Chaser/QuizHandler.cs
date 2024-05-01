@@ -12,10 +12,10 @@ using System.IO;
 
 namespace Chaser
 {
-    internal class QuizHandler : TriviaHandler
+    internal class QuizHandler : TriviaHandler //המחלקה שעוזרת לנהל את החידון המהיר
     {
-        public int currentRecord {get;set;}
-        public string username;
+        public int currentRecord {get;set;}//השיא הנוכחי של השחקן
+        public string username;//המשתמש שמשחק
         
         public QuizHandler(string userName): base()
         {
