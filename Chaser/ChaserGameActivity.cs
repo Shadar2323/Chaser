@@ -47,15 +47,15 @@ namespace Chaser
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.chaser);
-            gameHandler = new GameHandler();
+            gameHandler = new GameHandler(); //פותח את המחלקת עזרה למשחק
             sessionManager = new SessionManager(GetSharedPreferences("LoginPrefs", FileCreationMode.Private));
             string dbPath = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal), "trivia.db");
-            databaseHelper = new DatabaseHelper(dbPath);
-
+            databaseHelper = new DatabaseHelper(dbPath);//מקשר לבסיס נתונים ולSP
+            
             // Lock screen orientation to landscape
             RequestedOrientation = ScreenOrientation.Landscape;
 
-            qAndA = gameHandler.GetRandomQuestion();
+            qAndA = gameHandler.GetRandomQuestion();//מקבל את השאלות (תלוי רמת קושי
             question = FindViewById<TextView>(Resource.Id.question);
             question.Text = qAndA.question;
 
@@ -79,9 +79,7 @@ namespace Chaser
             userName = sessionManager.GetSavedUsername();
             currentPlayer = databaseHelper.GetCurrentPlayer(userName); // Retrieve the current player from your database or session
 
-            SetPlayerDetails();
-           
-
+            SetPlayerDetails();          
 
             chestLogo = FindViewById<ImageView>(Resource.Id.chestIcon);
             chaserLogo = FindViewById<ImageView>(Resource.Id.chaserLogo1);
@@ -96,11 +94,10 @@ namespace Chaser
                 ShowCustomDialog();
             };
 
-
             // Create and set up AnswerButtons
             InitializeAnswerButtonsArray();
         }
-        public void SetPlayerLogo()
+        public void SetPlayerLogo()//שם את התמונה של השחקן במיקום המתבקש
         {
             // Get the current layout parameters
             ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams)playerLogo.LayoutParameters;
@@ -131,7 +128,7 @@ namespace Chaser
             playerProfileImagePath = currentPlayer.ProfileImage; // Get the profile image URI of the player
             playerProfileImage = FindViewById<ImageView>(Resource.Id.playerPic);
             LoadProfileImage();
-        }
+        }//מקשר את השם משתמש במשחק לשם משתמש של השחקן ואת התמונה
         private void LoadProfileImage()
         {
             if (!string.IsNullOrEmpty(playerProfileImagePath))
@@ -145,7 +142,7 @@ namespace Chaser
                 playerProfileImage.SetImageResource(Resource.Drawable.player);                
             }
             playerProfileImage.SetBackgroundColor(Android.Graphics.Color.Transparent);
-        }
+        }//טוען את התמונה מהבסיס נתונים לתמונה במסך
         private void ShowCustomDialog()
         {
             // Pause the game
@@ -189,8 +186,7 @@ namespace Chaser
 
             // Show the dialog
             dialog = builder.Show();
-        }
-
+        }//פותח את הדיאלוג שלוחצים עליו ובונה אותו
         private void MoveAnimation(ImageView logo)
         {
 
@@ -198,7 +194,7 @@ namespace Chaser
                     .TranslationXBy(gameHandler.GetMoveAnimation())
                     .SetDuration(500) // Set the duration of the animation in milliseconds
                     .Start();
-        }
+        }//מבצע את האנימציה לשחקן ולצ'ייסר
         private void OnTimedEvent(object sender, ElapsedEventArgs e)
         {
             RunOnUiThread(() =>
@@ -216,7 +212,7 @@ namespace Chaser
                     // Handle countdown completion
                 }
             });
-        }
+        }//מריץ את הטיימר
 
         private void UpdateCountdown(int seconds)
         {
@@ -224,7 +220,7 @@ namespace Chaser
             string formattedTime = $"{(seconds / 60):D2}:{(seconds % 60):D2}";
             // Update the TextView with the remaining time
             tvCountdown.Text = formattedTime.ToString();           
-        }
+        }//מעדכן את הטקסט של הזמן שנותר
 
         private void InitializeAnswerButtonsArray()
         {
@@ -243,7 +239,7 @@ namespace Chaser
                 button.Click += OnAnswerButtonClick;
             }
             UpdateScreen();
-        }
+        }//בונה במסך את ארבעת הכפתורים לתשובות
 
         private void OnAnswerButtonClick(object sender, EventArgs e)
         {
@@ -298,7 +294,7 @@ namespace Chaser
                     }
                 }
             }
-        }
+        }//מתפעל את לחיצת השחקן על הכפתור
 
         public void UpdateScreen()
         {
@@ -311,7 +307,7 @@ namespace Chaser
                 answersButtons[i].IsTrue = answer.isTrue;
             }
             ResetTimer();
-        }
+        }//טוען את השאלה ותשובות החדשים
         private void ResetTimer()
         {
             // Stop the current timer
@@ -325,7 +321,7 @@ namespace Chaser
 
             // Start the timer again
             countDownTimer.Start();
-        }
+        }//מאפס את השעון
         private void ShowVictoryDialog(bool playerWon)
         {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -368,33 +364,25 @@ namespace Chaser
             AlertDialog dialog = builder.Create();
             dialog.Show();
 
-        }
-
+        }//מציג את הדיאלוג שמופיע בסוף המשחק - הדיאולג דינמי ומשתנה לפי המנצח
         private void EndOfGame(bool playerWon)
         {
             countDownTimer.Stop();
             gameHandler.RestartGame();
             //await VictoryAnimnation();
             ShowVictoryDialog(playerWon);
-        }
+        }//מאפס את המשתנים מציג את הדיאלוג ומכין את עצמו למשחק חדש במקרה הצורך
         private void PauseGame()
         {
             // Pause any game-related activities
             countDownTimer.Stop();
             // You can add more pause logic here if needed
-        }
-
+        }//עוצר את המשחק
         private void ResumeGame()
         {
             // Resume game-related activities
             countDownTimer.Start();
             // You can add more resume logic here if needed
-        }
-        private async Task VictoryAnimnation()
-        {
-            Animation animScale = AnimationUtils.LoadAnimation(this, Resource.Animation.victory_anim);
-            chestLogo.StartAnimation(animScale);
-            await Task.Delay(3000);
-        }
+        }//ממשיך את המשחק
     }
 }

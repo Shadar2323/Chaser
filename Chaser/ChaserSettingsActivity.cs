@@ -36,16 +36,16 @@ namespace Chaser
 
         private void StartGame_Click(object sender, EventArgs e)
         {
-            string selectedDiff = diffSpinner.SelectedItem.ToString();
-            string selectedTime = timeSpinner.SelectedItem.ToString();
+            string selectedDiff = diffSpinner.SelectedItem.ToString(); //קורא איזה רמת קושי נבחרה
+            string selectedTime = timeSpinner.SelectedItem.ToString();// קורא כמה זמן לשאלה נבחר
 
-            settings.Diff = checkDifficulty(selectedDiff);
+            settings.Diff = checkDifficulty(selectedDiff);//מכניס  את זה למשתנה הגלובלי settings
             settings.Duration = Convert.ToInt32(selectedTime);
 
             Intent startGame = new Intent(this, typeof(ChaserGameActivity));
-            StartActivity(startGame);
+            StartActivity(startGame); //מתחיל את המשחק
         }
-        public string checkDifficulty(string diffValue)
+        public string checkDifficulty(string diffValue)//מתאם בין הטקסט בעברית למשתנים שצריכים להשימר באנגלית
         {
             string diff = "hard";
             if (diffValue=="קל")

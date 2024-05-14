@@ -115,6 +115,7 @@ namespace Chaser
             {
                 // Handle Return to Home button click
                 // You can navigate to the home screen or perform any action here
+                StopMusic();
                 Intent mainActivityIntent = new Intent(this, typeof(HomeScreenActivity));
                 StartActivity(mainActivityIntent);
             };
